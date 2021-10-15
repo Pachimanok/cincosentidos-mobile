@@ -133,7 +133,6 @@ class adminPedidoController extends Controller
             $qcantidad = db::table('detallepedidos')->where('id_pedido','=',$id)->sum('cantidad');
 
             $pdf = PDF::loadView('pdf.remito',array('datos' => $datos,'pedidos' => $qp,'cantidad' => $qcantidad));
-            
             $output = $pdf->output();
             file_put_contents('despachos/Despacho'.$id.'.pdf', $output);
             // enviar mail

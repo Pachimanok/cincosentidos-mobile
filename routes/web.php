@@ -45,7 +45,8 @@ Route::get('/home', function () {
 
         return view('home')->with('name', $name)->with('email', $email)->with('pedidos', $pedidos)->with('qp', $qp)->with('detalles', $detalle)->with('message', $message);
 
-    }else{
+    }
+    if($role == 'admin'){
 
         $pNuevos = db::table('pedidos')
         ->where('estado','=','comprado')->orderBy('created_at', 'DESC')->take(5)->get();
@@ -75,8 +76,6 @@ Route::get('/home', function () {
         
         $detalle = db::table('detallepedidos')->select('id_pedido','cantidad', 'producto')->get();
      
-
-
         return view('admin.home')->with('user', $user)
         ->with('pedidosNuevos', $pNuevos)
         ->with('qnuevos', $qnuevos)
@@ -92,8 +91,6 @@ Route::get('/home', function () {
         
 
     }
-    
-
 })->middleware('auth');
 
 Route::resource('catalogo', 'App\Http\Controllers\productoController');
