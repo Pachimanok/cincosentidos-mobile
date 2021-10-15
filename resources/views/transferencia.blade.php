@@ -9,13 +9,9 @@
           <h2 class="text-success text-center p-0">¡Compra realizada correctamente!</h2>
           <p class="text-center pb-0 mb-0">Para terminar transferinos: <br><strong>$ {{ $total}}.00</strong></h5>  
           <br>  
-          <p class="text-center text-secondary mt-5 pb-0 mb-0">CBU: <span id="p1">123456015605015013201651</span>
+          <p class="text-center text-secondary mt-5 pb-0 mb-0">CBU: <span id="p1">:0720068720000001574472</span>
           <br>
-          <button class="btn text-secondary" onclick="copiarAlPortapapeles('p1')"><i id="colorp1" class="far fa-copy"></i></button></p>
-          <p class="text-center text-secondary pb-0 mb-0">Alias: <span id="p2">DON.QUIJOTE.DELAMANCHA</span>
-            <br><button class="btn text-secondary" onclick="copiarAlPortapapeles('p2')"><i id="colorp2" class="far fa-copy"></i></button></p>
-          <br>
-            
+          <button class="btn text-secondary" onclick="copiarAlPortapapeles('p1')"><i id="colorp1" class="far fa-copy"></i></button></p> 
           <br>  
           <div class="row text-center">
               <div class="col-sm-5 mx-auto">
