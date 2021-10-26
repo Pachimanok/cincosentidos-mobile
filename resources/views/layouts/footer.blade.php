@@ -9,7 +9,7 @@
     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script type="module" src="{{ asset('script/pwabuilder-sw-register.js') }}"></script>
   <script type="module" src="{{ asset('script/pwabuilder-sw.js') }}"></script>
-  <script type="module" src="{{ asset('/pwabuilder-sw.ts') }}"></script>
+  <script type="module" src="{{ asset('/pwabuilder-sw.js') }}"></script>
   <script>
       navigator.serviceWorker.register("/pwabuilder-sw.js");
   </script>

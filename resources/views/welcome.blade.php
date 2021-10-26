@@ -7,6 +7,9 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>CincoSentidos</title>
+    <link rel="shortcut icon" href="{{ asset('assets/img/favicon/android-icon-36x36.png') }}">
+
+
     <meta content="" name="description">
     <meta content="" name="keywords">
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -29,6 +32,7 @@
     {{-- FONT STIX font-family: 'STIX Two Text', serif; --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
     <link
         href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap"
         rel="stylesheet">
@@ -120,7 +124,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     
-        <script type="module" src="pwabuilder-sw.ts"></script>
+        <script type="module" src="pwabuilder-sw.js"></script>
 
         <script>
             navigator.serviceWorker.register("pwabuilder-sw.js");

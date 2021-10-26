@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\nuevoDespacho;
 use App\Models\pedido;
+use App\Models\transport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -135,16 +136,24 @@ class adminPedidoController extends Controller
             $pdf = PDF::loadView('pdf.remito',array('datos' => $datos,'pedidos' => $qp,'cantidad' => $qcantidad));
             $output = $pdf->output();
             file_put_contents('despachos/Despacho'.$id.'.pdf', $output);
+            
             // enviar mail
-          
-            $mail = Mail::to('pachi@rail.com.ar')->send(new nuevoDespacho($datos));
+            $qtransporte = db::table('transports')->where('title','=',$datos->transporte)->get();
+            $transporte = $qtransporte[0];
+            $destinatario = $transporte->email;
+            $copia = $transporte->email_cc;
+            $des = explode(', ',$destinatario);
+            $desCop = explode(', ',$copia);
+
+
+            $mail = Mail::to($des)->cc($desCop)->send(new nuevoDespacho($datos)); 
             // cambiar status
             
             Session::flash('message','Mensaje Enviado a Transporte' . $mail);
             return Redirect::to('home'); 
 
             }
-        };
+        };  
         foreach($request['transporte'] as $transporte)
         /* revisamos si tenemos factura para cambiar el estado */
         if ($request['factura'] != null){

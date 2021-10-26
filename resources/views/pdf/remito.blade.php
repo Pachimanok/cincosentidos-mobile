@@ -77,7 +77,7 @@
     <div class="container">
 
         <div class="col">
-            <img src="https://pachiman.com.ar/public/assets/img/5s.png" style="width: 10rem;" alt="">
+            <img src="https://cincosentidos.ar/public/assets/img/5s.png" style="width: 10rem;" alt="">
             <h1>REMITO</h1>
             <h6>DESTINATARIO FINAL</h6>
         </div>
@@ -253,7 +253,7 @@
         <h4>Total de cajas: {{ $cantidad }}</h4>
         <h4>Total Declarado: ${{ $datos->total}}.00 </h4>
         <div class="col" style="margin-left: 70%; margin-right:5%;">
-            <img src="https://pachiman.com.ar/firmaManuel.png" style="float: right !important!; height:5rem;"alt="">
+            <img src="https://cincosentidos.ar/firmaManuel.png" style="float: right !important!; height:5rem;"alt="">
 
         </div>
 

@@ -101,6 +101,10 @@ Route::resource('mp', 'App\Http\Controllers\mpController');
 Route::resource('adminPedido', 'App\Http\Controllers\adminPedidoController');
 Route::resource('usuarios', 'App\Http\Controllers\usuariosController');
 Route::resource('imprimir', 'App\Http\Controllers\imprimirController');
+Route::resource('transporte', 'App\Http\Controllers\transportController');
+Route::resource('parametro', 'App\Http\Controllers\parametroController');
+
+
 
 
 
