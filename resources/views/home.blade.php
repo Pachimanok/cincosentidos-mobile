@@ -59,14 +59,19 @@
                             @endforeach
                         </small>
                     </p>
-                    <p><small class="text-muted">Seguimiento: <span
-                                id="p2">{{ $pedido->seguimiento }}</span></small>
+                  
+                        
+                            <p><small class="text-muted d-flex">
+                                Seguimiento:<input id="linkcatalogo" class="js-copytextarea  ml-5 " style="border:none; width:10rem; color:gray;"value="1234{{ $pedido->seguimiento }}"></small>
                     </p>
                     <div class="d-flex">
                         <div class="col text-center">
-                            <button class="btn" style="color: #af3636;
-                    " onclick="copiarAlPortapapeles('p2')" @if ($pedido->seguimiento == null) disabled @endif><i
+                            <button class="btn" style="color: #af3636;" 
+                            onclick="copiarAlPortapapeles('{{ $pedido->link_seguimiento }}');" {{-- @if ($pedido->seguimiento == null) disabled @endif --}}><i
                                     class="fas fa-shipping-fast"></i> Seguir pedido</button>
+
+                                 
+                                    
                         </div>
                         <div class="col">
                             <a href="pedido/{{ $pedido->id }}" class="btn " style="color:#af3636;border-left: 1px;
@@ -168,16 +173,25 @@
         </div>
     </div>
 </div>
-
 <script>
-    function copiarAlPortapapeles(id_elemento) {
-        var aux = document.createElement("input");
-        aux.setAttribute("value", document.getElementById(id_elemento).innerHTML);
-        document.body.appendChild(aux);
-        aux.select();
-        document.execCommand("copy");
-        document.body.removeChild(aux);
-        window.open('http://www.andesmarcargas.com/seguimiento.html', '_blank');
+    function copiarAlPortapapeles(direccion){
+        let link = document.getElementById('linkcatalogo');
+        link.select();
+        link.setSelectionRange(0, 99999);
+        document.execCommand('copy');
+        swal({
+            title: "Copiamos el número de seguimiento",
+            text: "Ahora te redireccionaremos a la pagina del transporte para que puedas consultar!",
+            icon: "success",
+            buttons: true,
+            successMode: true,
+            })
+            .then((redirigir) => {
+                if (redirigir) {
+                    window.open(direccion, '_blank')
+                }  
+            });                                             
     }
-</script>
+</script>     
+
 @extends('layouts.footer')

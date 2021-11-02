@@ -115,18 +115,22 @@ class pedidoContoller extends Controller
         $qpedido = db::table('detallepedidos')->join('products','detallepedidos.id_producto','=','products.id')->select('detallepedidos.cantidad','detallepedidos.id_producto','products.sub_titulo','products.titulo','products.precio','products.imagen')->where('detallepedidos.id_pedido','=',$id)->where('products.stock','=','si')->get();
         $qpedidoNo = db::table('detallepedidos')->join('products','detallepedidos.id_producto','=','products.id')->select('detallepedidos.cantidad','detallepedidos.id_producto','products.sub_titulo','products.titulo','products.precio','products.imagen')->where('detallepedidos.id_pedido','=',$id)->where('products.stock','=','no')->get();
         $suma = db::table('detallepedidos')->join('products','detallepedidos.id_producto','=','products.id')->select('products.precio')->where('detallepedidos.id_pedido','=',$id)->where('products.stock','=','si')->sum('products.precio');
-        
-/* 
+       
+/*      
         $suma = db::table('detallepedidos')->where('detallepedidos.id_pedido','=',$id)->get()->sum('precio'); */
 
+        
+        $faltantes = array();
+        foreach($qpedidoNo as $faltante) {
+            
+            $faltantes[] = $faltante->titulo . ' ' . $faltante->sub_titulo;
+        }
         $user = Auth::user();
         $d = $user->descuento;
         $u = $user->name;
-        
-
+    
         $dto = 1 - $d;
         $total = $suma * $dto;
-        
 
         $pedido = new pedido();
         $pedido->user = $u;
@@ -136,9 +140,17 @@ class pedidoContoller extends Controller
         $id_p = $id_pedido->id;
 
         foreach( $qpedido as $pedido);
+        
         $cantidad = $pedido->cantidad;
-        $precio = $pedido->precio * $dto * $cantidad;
+        
+        if($cantidad == null){
+           
+            return view('noHayStock');
+       
+        }else{
 
+      
+        $precio = $pedido->precio * $dto * $cantidad;
         $newPedido = new detallepedido();
         $newPedido->id_pedido = $id_p;
         $newPedido->cantidad= $cantidad;
@@ -148,14 +160,13 @@ class pedidoContoller extends Controller
         $newPedido->user= $u;
         $newPedido->save();     
         
-
+   
         $facturacion = db::table('facturacions')->where('user','=',$u)->get();
         $direccion = db::table('direccions')->where('user','=',$u)->get();
 
-
-        
-        return view ('repetirPedido')->with('pedidos', $qpedido)->with('pedidosNo', $qpedidoNo)->with('dto', $dto)->with('total',$total)->with('id',$id_p)->with('facturacion',$facturacion)->with('direccion',$direccion);
-    }
+        return view ('repetirPedido')->with('pedidos', $qpedido)->with('pedidosNo', $faltantes)->with('dto', $dto)->with('total',$total)->with('id',$id_p)->with('facturacion',$facturacion)->with('direccion',$direccion); 
+        }     
+}
 
     /**
      * Show the form for editing the specified resource.

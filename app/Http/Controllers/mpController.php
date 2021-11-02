@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\pedido;
+use Illuminate\Support\Facades\Auth;
+
 
 class mpController extends Controller
 {
@@ -12,9 +14,12 @@ class mpController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function index()
     {
-        echo 'pagado index'. $id;
+        $user = Auth::user();
+        $u = $user->name; 
+        
+        return view('FalloPagoMP')->with('nombre',$u);
     }
 
     /**
@@ -46,11 +51,14 @@ class mpController extends Controller
      */
     public function show($id)
     {
+        $user = Auth::user();
+        $u = $user->name; 
+
         $pagado = pedido::find($id);
         $pagado->estado_pago = 'cobrado';
         $pagado->save();
 
-        return redirect('/home');
+        return redirect('SuccessPagoMP')->with('nombre',$u);
     }
 
     /**
@@ -62,7 +70,7 @@ class mpController extends Controller
     public function edit($id)
     {
         
-        echo 'pagado edit'. $id;
+        
 
     }
 

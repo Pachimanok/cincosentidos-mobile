@@ -253,8 +253,11 @@
                                                 <select name="transporte[]" class="form-control border-primary">
                                                     <option value="{{ $pedido->transporte }}">-.Seleccionar
                                                         Transporte</option>
-                                                    <option value="Andesmar">Andesmar</option>
-                                                    <option value="Otro">Otro</option>
+                                                        @foreach ($transportes as $transporte)
+                                                            <option value="{{$transporte->title}}">{{$transporte->title}}</option>
+                                                            
+                                                        @endforeach
+                                                    
                                                 </select>
                                             </h6>
                                         </div>

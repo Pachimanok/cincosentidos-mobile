@@ -17,9 +17,9 @@ $item->unit_price = $total;
 $preference->items = array($item);
 
 $preference->back_urls = array(
-    "success" => "http://127.0.0.1:8000/mp/$id",
-    "failure" => "http://127.0.0.1:8000/home",
-    "pending" => "http://127.0.0.1:8000/home"
+    "success" => "https://cincosentidos.ar/mp/$id",
+    "failure" => "http://cincosentidos.ar/mp",
+    "pending" => "http://cincosentidos.ar/mp"
 );
 $preference->auto_return = "approved";
 $preference->save();

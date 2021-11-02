@@ -66,7 +66,7 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="{{ asset('img/ms-icon-144x144.png') }}">
     <meta name="theme-color" content="#ffffff">
-
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
-<body style="width: 100%;">
+<body style="width: 100%;" >

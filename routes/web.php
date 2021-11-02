@@ -4,8 +4,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,10 +31,10 @@ Route::get('/home', function () {
     if($role == 'user'){
 
         $qfacturacion = db::table('facturacions')->where('user','=',$name)->get()->count();
-        $pedidos = db::table('pedidos')->where('user','=',$name)->where('estado','!=','comprando')->take(5)->get();
+        $pedidos = db::table('pedidos')->where('user','=',$name)->where('estado','!=','comprando')->orderBy('created_at', 'DESC')->take(5)->get();
         $qp = $pedidos->count();
-        $detalle = db::table('detallepedidos')->join('products', 'detallepedidos.id_producto','=','products.id')->select('detallepedidos.*','products.sub_titulo')->where('detallepedidos.user','=',$name)    ->get();
-        
+        $detalle = db::table('detallepedidos')->join('products', 'detallepedidos.id_producto','=','products.id')->select('detallepedidos.*','products.sub_titulo')->where('detallepedidos.user','=',$name)->get();
+
         
         if($qfacturacion == 0){
 
@@ -46,6 +44,7 @@ Route::get('/home', function () {
         return view('home')->with('name', $name)->with('email', $email)->with('pedidos', $pedidos)->with('qp', $qp)->with('detalles', $detalle)->with('message', $message);
 
     }
+
     if($role == 'admin'){
 
         $pNuevos = db::table('pedidos')

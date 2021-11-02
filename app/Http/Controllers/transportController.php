@@ -28,7 +28,7 @@ class transportController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.createTransporte');
     }
 
     /**
@@ -39,8 +39,17 @@ class transportController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $transporte = new transport();
+        $transporte->title = $request['titulo'];
+        $transporte->link_seguimiento = $request['seguimiento'];
+        $transporte->email = $request['email'];
+        $transporte->email_cc = $request['email_cc'];
+        $transporte->save();
+
+        $transportes = DB::table('transports')->get();
+        return view('admin.transporte')->with('transportes',$transportes);
     }
+       
 
     /**
      * Display the specified resource.
@@ -78,7 +87,7 @@ class transportController extends Controller
     {
         $transporte = transport::find($id);
         $transporte->title = $request['title'];
-        $transporte->seguimiento = $request['seguimiento'];
+        $transporte->link_seguimiento = $request['seguimiento'];
         $transporte->email = $request['email'];
         $transporte->email_cc = $request['email_cc'];
         $transporte->save();

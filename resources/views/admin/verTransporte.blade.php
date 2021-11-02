@@ -18,7 +18,7 @@
                             Titulo: {{ $transporte->title }}
                         </h5>
                         <p class="mb-0 font-weight-bold text-sm">
-                            Seguimiento: {{ $transporte->seguimiento }}
+                            Seguimiento: {{ $transporte->link_seguimiento }}
                         </p>
                         <p class="mb-0 font-weight-bold text-sm">
                             email: {{ $transporte->email  }}
@@ -97,7 +97,7 @@
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" name="seguimiento"
                                         placeholder="https://transportesrl.com/seguimiento"
-                                        value="{{ $transporte->seguimiento }}">
+                                        value="{{ $transporte->link_seguimiento }}">
                                 </div>
                                 <label>Mail para Instrucciones: (separar con comasy entre comillas)</label>
                                 <div class="input-group mb-3">

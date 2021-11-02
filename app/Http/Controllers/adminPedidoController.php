@@ -69,10 +69,13 @@ class adminPedidoController extends Controller
         $user = Auth::user();
 
         $pNuevos = db::table('pedidos')->where('id','=',$id)->get();
+        $transportes = db::table('transports')->get();
         $pNuevos = $pNuevos[0];
         $qfactuacion = db::table('facturacions')->get();
         $qdireccion = db::table('direccions')->get();        
         $detalle = db::table('detallepedidos')->join('products','detallepedidos.id_producto','=','products.id')->select('detallepedidos.id_pedido','detallepedidos.cantidad', 'detallepedidos.producto', 'products.sub_titulo')->get();
+
+        
 
         return view('admin.verPedido')->with('user', $user)
         ->with('pedido', $pNuevos)
@@ -98,11 +101,15 @@ class adminPedidoController extends Controller
         $qdireccion = db::table('direccions')->get();        
         $detalle = db::table('detallepedidos')->join('products','detallepedidos.id_producto','=','products.id')->select('detallepedidos.id_pedido','detallepedidos.cantidad', 'detallepedidos.producto', 'products.sub_titulo')->get();
 
+        $transportes = db::table('transports')->get();
+        
         return view('admin.editPedido')->with('user', $user)
         ->with('pedido', $pNuevos)
         ->with('detalles', $detalle)
         ->with('facturacion', $qfactuacion)
-        ->with('direccion', $qdireccion);
+        ->with('direccion', $qdireccion)
+        ->with('transportes', $transportes);
+
     }
 
     /**
@@ -120,11 +127,16 @@ class adminPedidoController extends Controller
             if($request['transporte'] != null){
 
             foreach($request['transporte'] as $transporte)
+           
+            $qd = db::table('transports')->select('link_seguimiento')->where('title','=',$transporte)->get();
+            $link = $qd[0];
+            
             $estado = 'SolicitadoDespacho';
             
             $pedido = pedido::find($id);
             $pedido->estado = $estado;
             $pedido->transporte = $transporte;
+            $pedido->link_seguimiento= $link;
             $pedido->remito = $request['remito'];
             $pedido->save(); 
 

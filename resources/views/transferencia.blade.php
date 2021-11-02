@@ -35,9 +35,11 @@
         if(id_elemento == 'p1'){
             var cabs = document.querySelectorAll('#colorp1');
             cabs.forEach(function(v){v.style.color = "#193b87"} );
+            swal("¡CBU copiado en tu telefono", "", "success");
         }else{
             var cabs = document.querySelectorAll('#colorp2');
             cabs.forEach(function(v){v.style.color = "#193b87"});
+            swal("¡Alias copiado en tu telefono", "", "success");
         }
 
       }
