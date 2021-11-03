@@ -18,8 +18,8 @@
                         function info(){
                           
                             swal({
-                                title: "No tenemos alugunos productos",
-                                text: 'No podemos incluir en este pedidos algunos de los productos que solicitaste en el pedido!',
+                                title: "Productos sin Stock",
+                                text: '¡alguno de los productos solicitados no se encuentran actualemente en stock!',
                                 icon: "warning",
                                 buttons: true,
                                 warningMode: true,
@@ -53,7 +53,7 @@
                             <div class="d-flex">
                                 <div class="col-auto mx-auto">
                                     <h6 style="color: #af3636;"> Subtotal:
-                                        $ {{  $pedido->precio * $dto}}.00</h6>
+                                        $ {{  $pedido->precio * $dto * $pedido->cantidad }}.00</h6>
                                 </div>
                             </div>
                         </li>

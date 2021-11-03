@@ -6,7 +6,7 @@
         <div class="row g-3" >
             <div class="col">
                 <h2 class="text-center">NUESTROS PRODUCTOS</h2>
-                <p class="text-center"><i>el catálogo cuento con el {{ $dto }}% de Descuento.</i></p>
+                <p class="text-center"><i>el catálogo cuenta con el {{ $dto }}% de descuento.</i></p>
             </div>
         </div>
         @foreach ($productos as $producto)

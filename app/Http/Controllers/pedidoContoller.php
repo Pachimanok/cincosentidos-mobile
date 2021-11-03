@@ -111,62 +111,77 @@ class pedidoContoller extends Controller
      */
     public function show($id)
     {
-        
+        /* 1. traemos la informacion del pedido previamente realizado */
+        /* 1.a revisamos que esté en stock  */
+        /* 1.b Revisamos si hay faltantes para comunicar  */
+        /* 1.c compromamos le precio actual  */
+
+
         $qpedido = db::table('detallepedidos')->join('products','detallepedidos.id_producto','=','products.id')->select('detallepedidos.cantidad','detallepedidos.id_producto','products.sub_titulo','products.titulo','products.precio','products.imagen')->where('detallepedidos.id_pedido','=',$id)->where('products.stock','=','si')->get();
         $qpedidoNo = db::table('detallepedidos')->join('products','detallepedidos.id_producto','=','products.id')->select('detallepedidos.cantidad','detallepedidos.id_producto','products.sub_titulo','products.titulo','products.precio','products.imagen')->where('detallepedidos.id_pedido','=',$id)->where('products.stock','=','no')->get();
-        $suma = db::table('detallepedidos')->join('products','detallepedidos.id_producto','=','products.id')->select('products.precio')->where('detallepedidos.id_pedido','=',$id)->where('products.stock','=','si')->sum('products.precio');
-       
-/*      
-        $suma = db::table('detallepedidos')->where('detallepedidos.id_pedido','=',$id)->get()->sum('precio'); */
-
+        $suma = db::table('detallepedidos')->join('products','detallepedidos.id_producto','=','products.id')->select(db::raw('sum(products.precio * detallepedidos.cantidad) as sumado'))->where('detallepedidos.id_pedido','=',$id)->where('products.stock','=','si')->get();
+        $qtotal = $suma[0]->sumado;
+        /* 2. Armamos el mensaje para la vista */
         
         $faltantes = array();
-        foreach($qpedidoNo as $faltante) {
-            
-            $faltantes[] = $faltante->titulo . ' ' . $faltante->sub_titulo;
-        }
-        $user = Auth::user();
-        $d = $user->descuento;
-        $u = $user->name;
-    
-        $dto = 1 - $d;
-        $total = $suma * $dto;
+            foreach($qpedidoNo as $faltante) {
+                $faltantes[] = $faltante->titulo . ' ' . $faltante->sub_titulo;
+            }
+        /* 3. Armamos el nuevo pedido */
+        /* 3.a Datos del Usuario */
+        /* 3.b calulamos el descuento y se lo aplicamos al precio final */
+        /* 3.c armamos un nuevo pedido */
+        /* 3.d buscamos el ultimo pedido generado en la DB */
+        /* 3.e revisamos que haya por lo menos 1 item para mostrar */
+        /* 3.f guardamos la solicitud en la DB */
+        /* 3.g Buscamos los datos de facturacion y direccion */
+        /* 3.h enviamos a la vista las variables */
 
-        $pedido = new pedido();
-        $pedido->user = $u;
-        $pedido->save();
-
-        $id_pedido = pedido::latest('id')->first(); 
-        $id_p = $id_pedido->id;
-
-        foreach( $qpedido as $pedido);
+            $user = Auth::user();
+            $d = $user->descuento;
+            $u = $user->name;
         
-        $cantidad = $pedido->cantidad;
-        
-        if($cantidad == null){
+            $dto = 1 - $d;
+            $total = $qtotal * $dto;
            
-            return view('noHayStock');
-       
-        }else{
+            
+            if($qpedido->isEmpty()){
+              
+                    return view('noHayStock');
+                
+            }else{  
+                
+                foreach($qpedido as $pedido){ 
+                
+                    $cantidad = $pedido->cantidad;
+                }
+                $pedido = new pedido();
+                $pedido->user = $u;
+                $pedido->save();
 
-      
-        $precio = $pedido->precio * $dto * $cantidad;
-        $newPedido = new detallepedido();
-        $newPedido->id_pedido = $id_p;
-        $newPedido->cantidad= $cantidad;
-        $newPedido->producto= $pedido->titulo;
-        $newPedido->id_producto= $pedido->id_producto;
-        $newPedido->precio= $precio;
-        $newPedido->user= $u;
-        $newPedido->save();     
-        
+                $id_pedido = pedido::latest('id')->first(); 
+                $id_p = $id_pedido->id;
+            
+
+                $precio = $pedido->precio * $dto * $cantidad;
+                    
+                $newPedido = new detallepedido();
+                $newPedido->id_pedido = $id_p;
+                $newPedido->cantidad = $cantidad;
+                $newPedido->producto = $pedido->titulo;
+                $newPedido->id_producto = $pedido->id_producto;
+                $newPedido->precio = $precio;
+                $newPedido->user = $u;
+                $newPedido->save();     
+            }
    
         $facturacion = db::table('facturacions')->where('user','=',$u)->get();
         $direccion = db::table('direccions')->where('user','=',$u)->get();
-
+        
         return view ('repetirPedido')->with('pedidos', $qpedido)->with('pedidosNo', $faltantes)->with('dto', $dto)->with('total',$total)->with('id',$id_p)->with('facturacion',$facturacion)->with('direccion',$direccion); 
-        }     
-}
+        
+    }     
+
 
     /**
      * Show the form for editing the specified resource.

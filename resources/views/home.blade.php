@@ -62,16 +62,13 @@
                   
                         
                             <p><small class="text-muted d-flex">
-                                Seguimiento:<input id="linkcatalogo" class="js-copytextarea  ml-5 " style="border:none; width:10rem; color:gray;"value="1234{{ $pedido->seguimiento }}"></small>
+                                Seguimiento:<input id="linkcatalogo" class="js-copytextarea  ml-5 " style="border:none; width:10rem; color:gray;"value="{{ $pedido->seguimiento }}"></small>
                     </p>
                     <div class="d-flex">
                         <div class="col text-center">
                             <button class="btn" style="color: #af3636;" 
-                            onclick="copiarAlPortapapeles('{{ $pedido->link_seguimiento }}');" {{-- @if ($pedido->seguimiento == null) disabled @endif --}}><i
-                                    class="fas fa-shipping-fast"></i> Seguir pedido</button>
-
-                                 
-                                    
+                            onclick="copiarAlPortapapeles('{{ $pedido->link_seguimiento }}');" @if ($pedido->seguimiento == null) disabled @endif><i
+                                    class="fas fa-shipping-fast"></i> Seguir pedido</button>                                    
                         </div>
                         <div class="col">
                             <a href="pedido/{{ $pedido->id }}" class="btn " style="color:#af3636;border-left: 1px;

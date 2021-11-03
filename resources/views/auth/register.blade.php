@@ -46,8 +46,8 @@
                                 4rem;">
                             <h6 class="register">Password
                             </h6>
-                            <input id="password" type="password" class="form-control @error('password') 
-                                        is-invalid @enderror" name="password" required autocomplete="new-password" placeholder="Malbec2021"  register>
+                            <input id="password" type="password"  class="form-control register @error('password') 
+                                        is-invalid @enderror" name="password" required autocomplete="new-password" placeholder="Malbec2021"  required>
                             @error('password')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
