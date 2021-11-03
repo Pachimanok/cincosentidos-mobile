@@ -129,14 +129,14 @@ class adminPedidoController extends Controller
             foreach($request['transporte'] as $transporte)
            
             $qd = db::table('transports')->select('link_seguimiento')->where('title','=',$transporte)->get();
-            $link = $qd[0];
-            
+            $link = $qd[0]->link_seguimiento;
+           
             $estado = 'SolicitadoDespacho';
             
             $pedido = pedido::find($id);
             $pedido->estado = $estado;
             $pedido->transporte = $transporte;
-            $pedido->link_seguimiento= $link;
+            $pedido->link_seguimiento = $link;
             $pedido->remito = $request['remito'];
             $pedido->save(); 
 
