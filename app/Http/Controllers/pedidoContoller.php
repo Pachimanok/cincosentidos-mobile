@@ -155,15 +155,16 @@ class pedidoContoller extends Controller
                 
                     $cantidad = $pedido->cantidad;
                 }
-                $pedido = new pedido();
-                $pedido->user = $u;
-                $pedido->save();
+                $pedidoas = new pedido();
+                $pedidoas->user = $u;
+                $pedidoas->save();
 
                 $id_pedido = pedido::latest('id')->first(); 
                 $id_p = $id_pedido->id;
             
 
                 $precio = $pedido->precio * $dto * $cantidad;
+              
                     
                 $newPedido = new detallepedido();
                 $newPedido->id_pedido = $id_p;
