@@ -166,6 +166,7 @@ class adminPedidoController extends Controller
 
             }
         };  
+        //testing change
         foreach($request['transporte'] as $transporte)
         /* revisamos si tenemos factura para cambiar el estado */
         if ($request['factura'] != null){
