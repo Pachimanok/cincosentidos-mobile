@@ -152,13 +152,22 @@ class adminPedidoController extends Controller
             // enviar mail
             $qtransporte = db::table('transports')->where('title','=',$datos->transporte)->get();
             $transporte = $qtransporte[0];
-            $destinatario = $transporte->email;
             $copia = $transporte->email_cc;
-            $des = explode(', ',$destinatario);
-            $desCop = explode(', ',$copia);
+            $destinatario = $transporte->email;
 
+            if( strpos($destinatario, ',') !== false || strpos($destinatario, ', ') !== false) {
+                /* tiene mas de un destinatario */
+                $destinatario = explode(', ',$destinatario); 
+               
 
-            $mail = Mail::to($des)->cc($desCop)->send(new nuevoDespacho($datos)); 
+           }
+           if( strpos($copia, ',') !== false || strpos($copia, ', ') !== false ) {
+            /* tiene mas de un destinatario en copia */
+           
+            $copia = explode(', ',$copia);
+
+            }           
+            $mail = Mail::to($destinatario)->cc($copia)->send(new nuevoDespacho($datos)); 
             // cambiar status
             
             Session::flash('message','Mensaje Enviado a Transporte' . $mail);
@@ -166,7 +175,6 @@ class adminPedidoController extends Controller
 
             }
         };  
-        //testing change
         foreach($request['transporte'] as $transporte)
         /* revisamos si tenemos factura para cambiar el estado */
         if ($request['factura'] != null){
