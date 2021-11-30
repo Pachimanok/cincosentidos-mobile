@@ -28,11 +28,12 @@
                 </div>
                 <div class="col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
                     <h4 class="mb-1">
-                        Descuento: {{ $usuario->descuento * 100 }} %
-                        <button type="button" class="btn btn-outline-primary" style="border:none;"
-                            data-bs-toggle="modal" data-bs-target="#modal-form"><i class="fas fa-pencil-alt"></i>
-                        </button>
+                        Descuento: {{ $usuario->descuento * 100 }} % <br>
+                        <small>Role: {{ $usuario->role }}</small>
                     </h4>
+                    <button type="button" class="btn btn-outline-primary" style="border:none;"
+                            data-bs-toggle="modal" data-bs-target="#modal-form"><i class="fas fa-pencil-alt"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -131,6 +132,15 @@
                                 <div class="input-group mb-3">
                                     <input type="number" class="form-control" name="descuento" placeholder="20" value="{{$usuario->descuento * 100  }}" aria-label="number"
                                         aria-describedby="Descuento">
+                                </div>
+                                <label>Role:</label>
+                                <div class="input-group mb-3">
+                                    <select name="role[]" class="form-control">
+                                            <option value="{{$usuario->role }}">{{$usuario->role }}</option>
+                                            <option value="admin">admin</option>
+                                            <option value="user">user</option>
+                                    </select>
+                                    
                                 </div>
                                 <div class="text-center">
                                     <button type="submit"

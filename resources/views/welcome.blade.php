@@ -67,12 +67,60 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="../assets/img/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
-
+    
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 </head>
 
 <body>
+    <script>
+        
+        let installButton = document.createElement('button');
+
+        let prompt;
+
+        window.addEventListener('beforeinstallprompt', function(e){
+             
+                // Prevent the mini-infobar from appearing on mobile
+                e.preventDefault();
+                // Stash the event so it can be triggered later.
+                prompt = e;
+                      
+        });
+
+        installButton.addEventListener('click', function(){
+
+            prompt.prompt();
+           
+
+        })
+        let installed = false;
+
+        installButton.addEventListener('click', async function(){
+        prompt.prompt();
+        let result = await that.prompt.userChoice;
+        if (result&&result.outcome === 'accepted') {
+            installed = true;
+        }
+        })
+
+        window.addEventListener('appinstalled', async function(e) {
+        installButton.style.display = "none";
+        
+        function isThisDeviceRunningiOS(){
+        if (['iPad Simulator', 'iPhone Simulator','iPod Simulator', 'iPad','iPhone','iPod'].includes(navigator.platform))
+        return true;
+        }
+        // iPad on iOS 13  
+        else if (navigator.userAgent.includes("Mac") && "ontouchend" in document)){
+            return true;
+        }   
+        else {
+            return false;
+        }
+}
+    
+    </script>
     <div class="container">
         <div class="d-flex">
             <div class="col-sm-5 mx-auto">
@@ -110,6 +158,7 @@
             </div>
         </div>
     </div>
+    
     <script type="module">
         < script src = "https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
         integrity = "sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"

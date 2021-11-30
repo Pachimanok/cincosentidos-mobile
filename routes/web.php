@@ -92,6 +92,77 @@ Route::get('/home', function () {
     }
 })->middleware('auth');
 
+
+Route::get('/nuevos', function () {
+
+    $pNuevos = db::table('pedidos')
+    ->where('estado','=','comprado')->orderBy('created_at', 'DESC')->take(5)->get();
+    $detalle = db::table('detallepedidos')->select('id_pedido','cantidad', 'producto')->get();
+      
+    $user = Auth::user();
+
+    return view('admin.allPedidosNuevos')
+    ->with('user', $user)
+    ->with('pedidosNuevos', $pNuevos) 
+    ->with('detalles', $detalle);
+
+});
+Route::get('/facturados', function () {
+
+    $pFacturados = db::table('pedidos')
+    ->where('estado','=','facturado')->orderBy('created_at', 'DESC')->take(5)->get();
+    $detalle = db::table('detallepedidos')->select('id_pedido','cantidad', 'producto')->get();
+      
+    $user = Auth::user();
+
+    return view('admin.allPedidosFacturados')
+    ->with('user', $user)
+    ->with('pedidosFacturados', $pFacturados)
+    ->with('detalles', $detalle);
+
+});
+Route::get('/despacho', function () {
+
+    $pDespacho = db::table('pedidos')
+    ->where('estado','=','SolicitadoDespacho')->orderBy('created_at', 'DESC')->take(5)->get();
+    $detalle = db::table('detallepedidos')->select('id_pedido','cantidad', 'producto')->get();
+      
+    $user = Auth::user();
+
+    return view('admin.allPedidosDespacho')
+    ->with('user', $user)
+    ->with('pedidosDespacho', $pDespacho)
+    ->with('detalles', $detalle);
+
+});
+Route::get('/enviados', function () {
+
+    $pEnviados = db::table('pedidos')
+    ->where('estado','=','enviado')->orderBy('created_at', 'DESC')->take(5)->get();
+    $detalle = db::table('detallepedidos')->select('id_pedido','cantidad', 'producto')->get();
+      
+    $user = Auth::user();
+
+    return view('admin.allPedidosEnviados')
+    ->with('user', $user)
+    ->with('pedidosEnviados', $pEnviados)
+    ->with('detalles', $detalle);
+
+});
+Route::get('/incompletos', function () {
+
+    $pComprando = db::table('pedidos')
+    ->where('estado','=','comprando')->orderBy('created_at', 'DESC')->take(5)->get();
+    $detalle = db::table('detallepedidos')->select('id_pedido','cantidad', 'producto')->get();
+      
+    $user = Auth::user();
+
+    return view('admin.allPedidosIncompletos')
+    ->with('user', $user)
+    ->with('pedidosComprando', $pComprando)
+    ->with('detalles', $detalle);
+
+});
 Route::resource('catalogo', 'App\Http\Controllers\productoController');
 Route::resource('pedido', 'App\Http\Controllers\pedidoContoller');
 Route::resource('facturacion', 'App\Http\Controllers\facturacionController');

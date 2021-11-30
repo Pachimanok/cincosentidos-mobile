@@ -1,19 +1,7 @@
 @include('admin.layouts.header')
-<div class="container bg-light pt-5">
-
-    <nav class="navbar fixed-top navbar-light bg-light">
-        <div class="container-fluid">
-            <div class="col-sm-3">
-                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                    Menu
-                </button>
-            </div>
-            <div class="col-sm-7">
-                <h1 class="text-center">Producto</h1>
-            </div>
-        </div>
-    </nav>
+<body class="g-sidenav-show  bg-gray-100">
+    @include('admin.layouts.barraLateral')
+  
     <form action="/catalogo" method="post"  enctype="multipart/form-data">
         @csrf
     <div class="card mt-5">
@@ -39,6 +27,10 @@
                 <option value="activo">Activo</option>
                 <option value="no activo">No Activo</option>
             </select>
+            <br>
+            <h3 class="d-flex text-primary">Orden <input type="text" name="orden"
+                class="form-control border-primary" style="margin-left: 1rem;" placeholder="1-100"
+              ></h3>
         </div>
         <div class="row">
             <div class="col-sm-5 mx-auto text-center">

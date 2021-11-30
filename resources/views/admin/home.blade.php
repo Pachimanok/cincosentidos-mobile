@@ -56,7 +56,7 @@
             </div>
           </div>
           <div class="col-sm-5 mx-auto text-center mt-3 mb-3">
-            <a class="btn bg-gradient-dark mb-0" href="javascript:;">Ver los {{ $qnuevos }} pedidos nuevos</a>
+            <a class="btn bg-gradient-dark mb-0" href="/nuevos">Ver los {{ $qnuevos }} pedidos nuevos</a>
           </div>
         </div>
       </div>
@@ -115,7 +115,7 @@
             </div>
           </div>
           <div class="col-sm-5 mx-auto text-center mt-1 mb-2">
-            <a class="btn bg-gradient-dark mb-0" href="javascript:;">Ver los {{ $qfacturados }} pedidos facturados</a>
+            <a class="btn bg-gradient-dark mb-0" href="/facturados">Ver los {{ $qfacturados }} pedidos facturados</a>
           </div>
         </div>
       </div>
@@ -124,7 +124,7 @@
       <div class="col-12">
         <div class="card mb-4">
           <div class="card-header pb-0">
-            <h6>Pedidos Soliciados Despacho</h6>
+            <h6>Pedidos Solicitados Despacho</h6>
           </div>
           <div class="card-body px-0 pt-0 pb-2">
             <div class="table-responsive p-0">
@@ -175,7 +175,7 @@
             </div>
           </div>
           <div class="col-sm-5 mx-auto text-center mt-1 mb-2">
-            <a class="btn bg-gradient-dark mb-0" href="javascript:;">Ver los {{ $qdespacho }} pedidos despacho</a>
+            <a class="btn bg-gradient-dark mb-0" href="/despacho">Ver los {{ $qdespacho }} pedidos despacho</a>
           </div>
         </div>
       </div>
@@ -235,7 +235,7 @@
             </div>
           </div>
           <div class="col-sm-5 mx-auto text-center mt-1 mb-2">
-            <a class="btn bg-gradient-dark mb-0" href="javascript:;">Ver los {{ $qenviados }} pedidos enviados</a>
+            <a class="btn bg-gradient-dark mb-0" href="/enviados">Ver los {{ $qenviados }} pedidos enviados</a>
           </div>
         </div>
       </div>
@@ -295,7 +295,7 @@
             </div>
           </div>
           <div class="col-sm-5 mx-auto text-center mt-1 mb-2">
-            <a class="btn bg-gradient-dark mb-0" href="javascript:;">Ver los {{ $qenviados }} pedidos enviados</a>
+            <a class="btn bg-gradient-dark mb-0" href="/incompletos">Ver los {{ $qenviados }} pedidos enviados</a>
           </div>
         </div>
       </div>

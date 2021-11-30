@@ -1,6 +1,10 @@
 </main>
 <!-- scripts bootstrap-->
-
+<div class="fixed-plugin">
+  <a target="_branck "href="https://api.whatsapp.com/send?phone=5492612537701&text=Hola, tengo una duda sobre el Dashoboard de CincoSentidos"class="fixed-plugin-button text-dark position-fixed px-3 py-2">
+   <i class="fa fa-headset py-2" aria-hidden="true"> </i>
+  </a>
+</div>
   <script
   src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
   integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"

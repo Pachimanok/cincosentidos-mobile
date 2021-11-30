@@ -30,13 +30,13 @@ class productoController extends Controller
         if ( $r == 'user'){
             $d = 1 - $user->descuento;
             $dto = $user->descuento * 100;
-            $productos = db::table('products')->where('estado','=','activo')->get();
+            $productos = db::table('products')->where('estado','=','activo')->orderBy('orden', 'asc')->get();
             
             return view('catalogo2')->with('productos', $productos)->with('d', $d)->with('dto', $dto);
 
         } else {
 
-            $productos = db::table('products')->get();
+            $productos = db::table('products')->orderBy('orden', 'asc')->get();
             return view('admin.catalogo')->with('productos', $productos)->with('message',$message);
 
         }
@@ -85,6 +85,7 @@ class productoController extends Controller
         $producto->detalle = $request['detalle'];
         $producto->estado = $estado;
         $producto->stock = $stock;
+        $producto->orden = $request['orden'];
         $producto->imagen = $name;
         $producto->user = $u;
 
@@ -157,14 +158,14 @@ class productoController extends Controller
         $producto->detalle = $request['detalle'];
         $producto->estado = $estado;
         $producto->stock = $stock;
+        $producto->orden = $request['orden'];
         $producto->imagen = $name;
         $producto->save();
         
         Session::flash('message','Se guardaron correctamente sus modificaciones');
         return Redirect::to('catalogo'); 
 
-        
-
+    
     }
 
     /**

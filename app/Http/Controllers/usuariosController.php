@@ -50,7 +50,9 @@ class usuariosController extends Controller
      */
     public function show($id)
     {
-        $user = Auth::user();
+        
+        $quser = db::table('users')->where('users.id', '=',$id)->get();
+        $user=$quser[0];
         $direccions = db::table('users')->join('direccions','users.name','=','direccions.user')->where('users.id', '=',$id)->get();
         $facturacions = db::table('users')->join('facturacions','users.name','=','facturacions.user')->where('users.id', '=',$id)->get();
 
@@ -80,13 +82,18 @@ class usuariosController extends Controller
      */
     public function update(Request $request, $id)
     {
+        foreach($request['role'] as $role);
+
         $dto = $request['descuento'] / 100;
 
         $descuento = user::find($id);
         $descuento->descuento = $dto;
+        $descuento->role = $role;
         $descuento->save();
 
-        $user = Auth::user();
+        $quser = db::table('users')->where('users.id', '=',$id)->get();
+        $user=$quser[0];
+
         $direccions = db::table('users')->join('direccions','users.name','=','direccions.user')->where('users.id', '=',$id)->get();
         $facturacions = db::table('users')->join('facturacions','users.name','=','facturacions.user')->where('users.id', '=',$id)->get();
 

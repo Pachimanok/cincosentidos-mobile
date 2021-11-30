@@ -176,18 +176,18 @@
         link.select();
         link.setSelectionRange(0, 99999);
         document.execCommand('copy');
-        swal({
-            title: "Copiamos el número de seguimiento",
-            text: "Ahora te redireccionaremos a la pagina del transporte para que puedas consultar!",
-            icon: "success",
-            buttons: true,
-            successMode: true,
-            })
-            .then((redirigir) => {
-                if (redirigir) {
-                    window.open(direccion, '_blank')
-                }  
-            });                                             
+            swal({
+                title: "Copiamos el número de seguimiento",
+                text: "Ahora te redireccionaremos a la pagina del transporte para que puedas consultar!",
+                icon: "success",
+                buttons: true,
+                successMode: true,
+                })
+                .then((redirigir) => {
+                    if (redirigir) {
+                        window.open(direccion, '_blank')
+                    }  
+                });                                             
     }
 </script>     
 
