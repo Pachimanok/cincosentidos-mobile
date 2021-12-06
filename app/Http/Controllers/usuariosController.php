@@ -111,6 +111,11 @@ class usuariosController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::find($id);
+        $user->delete();
+        
+        $usuarios = db::table('users')->get();
+        return view('admin.usuarios')->with('usuarios',$usuarios);
+        
     }
 }

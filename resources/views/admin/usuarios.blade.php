@@ -56,8 +56,12 @@
                                                 aria-label="Basic outlined example">
                                                 <a href="usuarios/{{ $usuario->id }}"
                                                     class="btn btn-outline-primary"><i class="far fa-eye"></i></a>
-                                                <button type="button" class="btn btn-outline-primary"><i
+                                                <form action="usuarios/{{ $usuario->id }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button  onclick="return confirm('¿Quieres eliminar este usuario?')"  class="btn btn-outline-primary"><i
                                                         class="far fa-trash-alt"></i></button>
+                                                </form>
                                             </div>
 
                                         </td>
