@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\transport;
+Use Illuminate\Support\Facades\Session;
+Use Illuminate\Support\Facades\Redirect;
 
 
 class transportController extends Controller
@@ -46,8 +48,8 @@ class transportController extends Controller
         $transporte->email_cc = $request['email_cc'];
         $transporte->save();
 
-        $transportes = DB::table('transports')->get();
-        return view('admin.transporte')->with('transportes',$transportes);
+        Session::flash('message','Se creó correctamente el transporte');
+        return Redirect::to('transporte'); 
     }
        
 
@@ -107,6 +109,10 @@ class transportController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $transporte = transport::find($id);
+        $transporte->delete();
+
+        Session::flash('message','Se eliminó el ttransporte correctamente');
+        return Redirect::to('transporte'); 
     }
 }

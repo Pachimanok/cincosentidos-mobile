@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+Use Illuminate\Support\Facades\Session;
+Use Illuminate\Support\Facades\Redirect;
 
 
 class usuariosController extends Controller
@@ -113,9 +115,9 @@ class usuariosController extends Controller
     {
         $user = User::find($id);
         $user->delete();
-        
-        $usuarios = db::table('users')->get();
-        return view('admin.usuarios')->with('usuarios',$usuarios);
+
+        Session::flash('message','Se eliminó el usuario correctamente');
+        return Redirect::to('usuarios'); 
         
     }
 }

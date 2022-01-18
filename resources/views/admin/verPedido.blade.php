@@ -17,9 +17,14 @@
                                 class="text-dark ms-sm-2 font-weight-bold">{{ $pedido->modo_pago }}</span></span>
                         <p @if ($pedido->estado_pago == 'por cobrar') class="text-danger" @else class="text-success" @endif><strong>Total: </strong> $ {{ $pedido->total }}.00</p>
                     </div>
-                    <div class="ms-auto text-end">
-                        <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;"><i
-                                class="far fa-trash-alt me-2"></i>Delete</a>
+                    <div class="ms-auto text-end d-flex">
+                        <form action="/adminPedido/{{ $pedido->id }}" method="post">
+                            @method('DELETE')
+                            @csrf
+                            <button type="submit" class="btn btn-link text-danger text-gradient px-3 mb-0"
+                            onclick="return confirm('¿Está seguro que quiere eliminar el pedido?')"
+                                style="border:none;"><i class="far fa-trash-alt me-2"></i> Delete</button>
+                        </form>
                         <a class="btn btn-link text-dark px-3 mb-0" href="/adminPedido/{{ $pedido->id }}/edit"><i
                                 class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit</a>
                     </div>

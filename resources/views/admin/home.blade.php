@@ -45,8 +45,13 @@
                                         class="far fa-eye"></i></a>
                                 <a href="adminPedido/{{ $pedidoN->id }}/edit" class="btn btn-outline-primary" style="border:none;"><i
                                         class="fas fa-pencil-alt"></i></a>
-                                <button type="button" class="btn btn-outline-primary" style="border:none;"><i
-                                        class="far fa-trash-alt" ></i></button>
+                                        <form action="adminPedido/{{ $pedidoN->id }}" method="post">
+                                          @method('DELETE')
+                                          @csrf
+                                          <button type="submit" class="btn btn-outline-primary"
+                                          onclick="return confirm('¿Está seguro que quiere eliminar el pedido?')"
+                                              style="border:none;"><i class="far fa-trash-alt"></i></button>
+                                      </form>
                             </div>
                         </td>
                     </tr>
@@ -104,8 +109,13 @@
                                         class="far fa-eye"></i></a>
                                 <a href="adminPedido/{{ $pedidoF->id }}/edit" class="btn btn-outline-primary" style="border:none;"><i
                                         class="fas fa-pencil-alt"></i></a>
-                                <button type="button" class="btn btn-outline-primary" style="border:none;"><i
-                                        class="far fa-trash-alt" ></i></button>
+                                        <form action="adminPedido/{{ $pedidoN->id }}" method="post">
+                                          @method('DELETE')
+                                          @csrf
+                                          <button type="submit" class="btn btn-outline-primary"
+                                          onclick="return confirm('¿Está seguro que quiere eliminar el pedido?')"
+                                              style="border:none;"><i class="far fa-trash-alt"></i></button>
+                                      </form>
                             </div>
                         </td>
                     </tr>
@@ -163,8 +173,13 @@
                                         class="far fa-eye"></i></a>
                                 <a href="adminPedido/{{ $pedidoD->id }}/edit" class="btn btn-outline-primary" style="border:none;"><i
                                         class="fas fa-pencil-alt"></i></a>
-                                <button type="button" class="btn btn-outline-primary" style="border:none;"><i
-                                        class="far fa-trash-alt" ></i></button>
+                                        <form action="adminPedido/{{ $pedidoN->id }}" method="post">
+                                          @method('DELETE')
+                                          @csrf
+                                          <button type="submit" class="btn btn-outline-primary"
+                                          onclick="return confirm('¿Está seguro que quiere eliminar el pedido?')"
+                                              style="border:none;"><i class="far fa-trash-alt"></i></button>
+                                      </form>
                             </div>
                         </td>
                     </tr>
@@ -223,8 +238,13 @@
                                         class="far fa-eye"></i></a>
                                 <a href="adminPedido/{{ $pedidoE->id }}/edit" class="btn btn-outline-primary" style="border:none;"><i
                                         class="fas fa-pencil-alt"></i></a>
-                                <button type="button" class="btn btn-outline-primary" style="border:none;"><i
-                                        class="far fa-trash-alt" ></i></button>
+                                        <form action="adminPedido/{{ $pedidoN->id }}" method="post">
+                                          @method('DELETE')
+                                          @csrf
+                                          <button type="submit" class="btn btn-outline-primary"
+                                          onclick="return confirm('¿Está seguro que quiere eliminar el pedido?')"
+                                              style="border:none;"><i class="far fa-trash-alt"></i></button>
+                                      </form>
                             </div>
                         </td>
                     </tr>
@@ -283,8 +303,13 @@
                                         class="far fa-eye"></i></a>
                                 <a href="adminPedido/{{ $pedidoC->id }}/edit" class="btn btn-outline-primary" style="border:none;"><i
                                         class="fas fa-pencil-alt"></i></a>
-                                <button type="button" class="btn btn-outline-primary" style="border:none;"><i
-                                        class="far fa-trash-alt" ></i></button>
+                                <form action="adminPedido/{{ $pedidoN->id }}" method="post">
+                                  @method('DELETE')
+                                  @csrf
+                                  <button type="submit" class="btn btn-outline-primary"
+                                  onclick="return confirm('¿Está seguro que quiere eliminar el pedido?')"
+                                      style="border:none;"><i class="far fa-trash-alt"></i></button>
+                              </form>
                             </div>
                         </td>
                     </tr>
@@ -295,7 +320,7 @@
             </div>
           </div>
           <div class="col-sm-5 mx-auto text-center mt-1 mb-2">
-            <a class="btn bg-gradient-dark mb-0" href="/incompletos">Ver los {{ $qenviados }} pedidos enviados</a>
+            <a class="btn bg-gradient-dark mb-0" href="/incompletos">Ver los {{ $qcomprando }} pedidos comprando</a>
           </div>
         </div>
       </div>

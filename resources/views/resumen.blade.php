@@ -36,7 +36,7 @@
                         <select class="form-control" id="campo"
                             style="border-top: none !important;
                             border-right: none;
-                            border-left: none;" name="facturacion[]">
+                            border-left: none;" name="facturacion[]" required>
                             <option value="">Elegir</option>
                             @foreach($facturacion as $facturacion)
                                 <option value="{{ $facturacion->id }}">{{ $facturacion->titulo}}</option>
@@ -49,7 +49,7 @@
                         <select class="form-control" id="campo"
                             style="border-top: none !important;
                             border-right: none;
-                            border-left: none;" name="direccion[]">
+                            border-left: none;" name="direccion[]" required>
                             <option value="">Elegir</option>
                             @foreach($direccion as $direccion)
                                 <option value="{{ $direccion->id }}">{{ $direccion->titulo}} ({{ $direccion->calle}} {{ $direccion->numero}})</option>
@@ -62,7 +62,7 @@
                         <select class="form-control" id="campo"
                             style="border-top: none !important;
                             border-right: none;
-                            border-left: none;" name="pago[]">
+                            border-left: none;" name="pago[]" required>
                             <option value="">Elegir</option>
                             <option value="transferencia">Transferencia</option>
                             <option value="mercadoPago">Mercado Pago</option>

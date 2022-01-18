@@ -96,7 +96,7 @@ Route::get('/home', function () {
 Route::get('/nuevos', function () {
 
     $pNuevos = db::table('pedidos')
-    ->where('estado','=','comprado')->orderBy('created_at', 'DESC')->take(5)->get();
+    ->where('estado','=','comprado')->orderBy('created_at', 'DESC')->get();
     $detalle = db::table('detallepedidos')->select('id_pedido','cantidad', 'producto')->get();
       
     $user = Auth::user();
@@ -110,7 +110,7 @@ Route::get('/nuevos', function () {
 Route::get('/facturados', function () {
 
     $pFacturados = db::table('pedidos')
-    ->where('estado','=','facturado')->orderBy('created_at', 'DESC')->take(5)->get();
+    ->where('estado','=','facturado')->orderBy('created_at', 'DESC')->get();
     $detalle = db::table('detallepedidos')->select('id_pedido','cantidad', 'producto')->get();
       
     $user = Auth::user();
@@ -124,7 +124,7 @@ Route::get('/facturados', function () {
 Route::get('/despacho', function () {
 
     $pDespacho = db::table('pedidos')
-    ->where('estado','=','SolicitadoDespacho')->orderBy('created_at', 'DESC')->take(5)->get();
+    ->where('estado','=','SolicitadoDespacho')->orderBy('created_at', 'DESC')->get();
     $detalle = db::table('detallepedidos')->select('id_pedido','cantidad', 'producto')->get();
       
     $user = Auth::user();
@@ -138,7 +138,7 @@ Route::get('/despacho', function () {
 Route::get('/enviados', function () {
 
     $pEnviados = db::table('pedidos')
-    ->where('estado','=','enviado')->orderBy('created_at', 'DESC')->take(5)->get();
+    ->where('estado','=','enviado')->orderBy('created_at', 'DESC')->get();
     $detalle = db::table('detallepedidos')->select('id_pedido','cantidad', 'producto')->get();
       
     $user = Auth::user();
@@ -152,7 +152,7 @@ Route::get('/enviados', function () {
 Route::get('/incompletos', function () {
 
     $pComprando = db::table('pedidos')
-    ->where('estado','=','comprando')->orderBy('created_at', 'DESC')->take(5)->get();
+    ->where('estado','=','comprando')->orderBy('created_at', 'DESC')->get();
     $detalle = db::table('detallepedidos')->select('id_pedido','cantidad', 'producto')->get();
       
     $user = Auth::user();

@@ -70,8 +70,13 @@
                                                 <a href="catalogo/{{ $producto->id }}/edit"
                                                     class="btn btn-outline-primary"><i
                                                         class="fas fa-pencil-alt"></i></a>
-                                                <button type="button" class="btn btn-outline-primary"><i
-                                                        class="far fa-trash-alt"></i></button>
+                                                <form action="catalogo/{{ $producto->id }}" method="post">
+                                                    @method('DELETE')
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-outline-primary"
+                                                    onclick="return confirm('¿Está seguro que quiere eliminar el producto?')"
+                                                        style="border:none;"><i class="far fa-trash-alt"></i></button>
+                                                </form>
                                             </div>
 
                                         </td>

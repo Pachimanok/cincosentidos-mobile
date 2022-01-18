@@ -1,10 +1,10 @@
 @if (session('message'))
-    <div class="toast align-items-center bg-primary text-white show" role="alert" style="margin-top:2rem;" aria-live="assertive" aria-atomic="true">
-        <div class="d-flex">
-            <div class="toast-body">
-                {{ session('message') }}
-            </div>
-            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-    </div>
-    @endif
+ <div class="row">
+     <div class="col-sm-8 mx-auto">
+        <div class="alert alert-info text-white alert-dismissible fade show" role="alert">
+            {{ session('message') }}
+            <button type="button" class="btn-close align-top" data-bs-dismiss="alert" aria-label="Close" style="color:white;"><span class="align-top" aria-hidden="true">&times;</span>  </button>
+        </div>  
+     </div>
+ </div>           
+@endif

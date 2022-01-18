@@ -176,6 +176,10 @@ class productoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $producto = product::find($id);
+        $producto->delete();
+
+        Session::flash('message','Se eliminó el producto correctamente');
+        return Redirect::to('catalogo'); 
     }
 }

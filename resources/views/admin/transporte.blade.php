@@ -59,8 +59,13 @@
                                                     <a href="transporte/{{ $transporte->id }}"
                                                         class="btn btn-outline-primary"><i
                                                             class="far fa-eye"></i></a>
-                                                    <button type="button" class="btn btn-outline-primary"><i
-                                                            class="far fa-trash-alt"></i></button>
+                                                            <form action="transporte/{{ $transporte->id }}" method="post">
+                                                                @method('DELETE')
+                                                                @csrf
+                                                                <button type="submit" class="btn btn-outline-primary"
+                                                                onclick="return confirm('¿Está seguro que quiere eliminar el transporte?')"
+                                                                    style="border:none;"><i class="far fa-trash-alt"></i></button>
+                                                            </form>
                                                 </div>
                                             </td>
                                         </tr>

@@ -227,6 +227,12 @@ class adminPedidoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $pedido = pedido::find($id);
+        $pedido->delete();
+
+      
+        Session::flash('message','Se eliminó el pedido correctamente');
+        return Redirect::to('home'); 
+
     }
 }

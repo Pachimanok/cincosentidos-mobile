@@ -67,8 +67,13 @@
                                                 <a href="adminPedido/{{ $pedidoN->id }}/edit"
                                                     class="btn btn-outline-primary" style="border:none;"><i
                                                         class="fas fa-pencil-alt"></i></a>
-                                                <button type="button" class="btn btn-outline-primary"
-                                                    style="border:none;"><i class="far fa-trash-alt"></i></button>
+                                                <form action="adminPedido/{{ $pedidoN->id }}" method="post">
+                                                    @method('DELETE')
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-outline-primary"
+                                                    onclick="return confirm('¿Está seguro que quiere eliminar el pedido?')"
+                                                        style="border:none;"><i class="far fa-trash-alt"></i></button>
+                                                </form>
                                             </div>
                                         </td>
                                     </tr>
