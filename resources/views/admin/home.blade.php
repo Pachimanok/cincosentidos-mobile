@@ -109,7 +109,7 @@
                                         class="far fa-eye"></i></a>
                                 <a href="adminPedido/{{ $pedidoF->id }}/edit" class="btn btn-outline-primary" style="border:none;"><i
                                         class="fas fa-pencil-alt"></i></a>
-                                        <form action="adminPedido/{{ $pedidoN->id }}" method="post">
+                                        <form action="adminPedido/{{ $pedidoF->id }}" method="post">
                                           @method('DELETE')
                                           @csrf
                                           <button type="submit" class="btn btn-outline-primary"
@@ -173,7 +173,7 @@
                                         class="far fa-eye"></i></a>
                                 <a href="adminPedido/{{ $pedidoD->id }}/edit" class="btn btn-outline-primary" style="border:none;"><i
                                         class="fas fa-pencil-alt"></i></a>
-                                        <form action="adminPedido/{{ $pedidoN->id }}" method="post">
+                                        <form action="adminPedido/{{ $pedidoD->id }}" method="post">
                                           @method('DELETE')
                                           @csrf
                                           <button type="submit" class="btn btn-outline-primary"
@@ -238,7 +238,7 @@
                                         class="far fa-eye"></i></a>
                                 <a href="adminPedido/{{ $pedidoE->id }}/edit" class="btn btn-outline-primary" style="border:none;"><i
                                         class="fas fa-pencil-alt"></i></a>
-                                        <form action="adminPedido/{{ $pedidoN->id }}" method="post">
+                                        <form action="adminPedido/{{ $pedidoE->id }}" method="post">
                                           @method('DELETE')
                                           @csrf
                                           <button type="submit" class="btn btn-outline-primary"
@@ -303,7 +303,7 @@
                                         class="far fa-eye"></i></a>
                                 <a href="adminPedido/{{ $pedidoC->id }}/edit" class="btn btn-outline-primary" style="border:none;"><i
                                         class="fas fa-pencil-alt"></i></a>
-                                <form action="adminPedido/{{ $pedidoN->id }}" method="post">
+                                <form action="adminPedido/{{ $pedidoC->id }}" method="post">
                                   @method('DELETE')
                                   @csrf
                                   <button type="submit" class="btn btn-outline-primary"
