@@ -23,7 +23,7 @@ class pedidoContoller extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**
@@ -45,62 +45,116 @@ class pedidoContoller extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        $u = $user->name;
-        $d = $user->descuento;
-        $dto = 1 - $d;
+        
+        if($user != null){
 
-        $pedido = new pedido();
-        $pedido->user = $u;
-        $pedido->save();
+            $u = $user->name;
+            $d = $user->descuento;
+            $dto = 1 - $d;
 
-        $id_pedido = pedido::latest('id')->first(); 
-        $id_p = $id_pedido->id;
+            $pedido = new pedido();
+            $pedido->user = $u;
+            $pedido->save();
 
-        foreach($request->get('cantidad') as $idart=>$cantidad){
+            $id_pedido = pedido::latest('id')->first(); 
+            $id_p = $id_pedido->id;
 
-            $catalogo = db::table('products')->where('id','=',$idart)->get();
-            $cat = $catalogo[0];
-            $prod = $cat->titulo;
-            $id_producto = $cat->id;
-            $px= $cat->precio;
-            $pf = $px * $dto * $cantidad;
+            foreach($request->get('cantidad') as $idart=>$cantidad){
 
-            if( $cantidad >=1){
+                $catalogo = db::table('products')->where('id','=',$idart)->get();
+                $cat = $catalogo[0];
+                $prod = $cat->titulo;
+                $id_producto = $cat->id;
+                $px= $cat->precio;
+                $pf = $px * $dto * $cantidad;
+
                 if( $cantidad >=1){
-                    $detpedido = new detallepedido();
-                    $detpedido->id_pedido = $id_p;
-                    $detpedido->cantidad = $cantidad;
-                    $detpedido->producto = $prod;
-                    $detpedido->id_producto = $id_producto;
-                    $detpedido->precio = $pf;
-                    $detpedido->user = $u;
-                    $detpedido->save();
+                    if( $cantidad >=1){
+                        $detpedido = new detallepedido();
+                        $detpedido->id_pedido = $id_p;
+                        $detpedido->cantidad = $cantidad;
+                        $detpedido->producto = $prod;
+                        $detpedido->id_producto = $id_producto;
+                        $detpedido->precio = $pf;
+                        $detpedido->user = $u;
+                        $detpedido->save();
+                    }
                 }
             }
+            
+            /* detalle pedido */
+            $detalle = db::table('detallepedidos')->where('id_pedido','=',$id_p)->get();
+            $total = $detalle->sum('precio');
+
+            /* total a pagar */
+            $qpx = db::table('pedidos')->where('id','=',$id_p)->get();
+            $precio = $qpx[0];
+            $px = $precio->total;
+            $id = $precio->id;
+
+            $pedido = pedido::find($id_p);
+            $pedido->total = $total;
+            $pedido->estado = 'comprando';
+            $pedido->save();
+
+
+            $facturacion = db::table('facturacions')->where('user','=',$u)->get();
+            $direccion = db::table('direccions')->where('user','=',$u)->get();
+
+
+            return view('resumen')->with('detalle',$detalle)->with('precio',$total)->with('id',$id)->with('facturacion',$facturacion)->with('direccion',$direccion);
+        }else{
+            $u = $request->user;
+            $dto = $request->dto;
+
+
+            $pedido = new pedido();
+            $pedido->user = $u;
+            $pedido->save();
+
+            $id_pedido = pedido::latest('id')->first(); 
+            $id_p = $id_pedido->id;
+
+            foreach($request->get('cantidad') as $idart=>$cantidad){
+
+                $catalogo = db::table('products')->where('id','=',$idart)->get();
+                $cat = $catalogo[0];
+                $prod = $cat->titulo;
+                $id_producto = $cat->id;
+                $px = $cat->precio;
+                $pf = $px * $dto * $cantidad;
+
+                if( $cantidad >=1){
+                    if( $cantidad >=1){
+                        $detpedido = new detallepedido();
+                        $detpedido->id_pedido = $id_p;
+                        $detpedido->cantidad = $cantidad;
+                        $detpedido->producto = $prod;
+                        $detpedido->id_producto = $id_producto;
+                        $detpedido->precio = $pf;
+                        $detpedido->user = $u;
+                        $detpedido->save();
+                    }
+                }
+            }
+            /* detalle pedido */
+            $detalle = db::table('detallepedidos')->where('id_pedido','=',$id_p)->get();
+            $total = $detalle->sum('precio');
+
+            /* total a pagar */
+            $qpx = db::table('pedidos')->where('id','=',$id_p)->get();
+            $precio = $qpx[0];
+            $px = $precio->total;
+            $id = $precio->id;
+
+            $pedido = pedido::find($id_p);
+            $pedido->total = $total;
+            $pedido->estado = 'comprando';
+            $pedido->save();
+
+            return view('resumenCompraUnica')->with('detalle',$detalle)->with('precio',$total)->with('id',$id);
+
         }
-        
-        /* detalle pedido */
-        $detalle = db::table('detallepedidos')->where('id_pedido','=',$id_p)->get();
-        $total = $detalle->sum('precio');
-
-         /* total a pagar */
-         $qpx = db::table('pedidos')->where('id','=',$id_p)->get();
-         $precio = $qpx[0];
-         $px = $precio->total;
-         $id = $precio->id;
-
-        $pedido = pedido::find($id_p);
-        $pedido->total = $total;
-        $pedido->estado = 'comprando';
-        $pedido->save();
-
-
-        $facturacion = db::table('facturacions')->where('user','=',$u)->get();
-        $direccion = db::table('direccions')->where('user','=',$u)->get();
-
-
-        return view('resumen')->with('detalle',$detalle)->with('precio',$total)->with('id',$id)->with('facturacion',$facturacion)->with('direccion',$direccion);
-
     }
 
     /**
@@ -204,6 +258,85 @@ class pedidoContoller extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        if($request->unica == 'unica'){
+            
+            foreach($request->get('pago') as $pago);
+            
+            foreach($request['cond_fiscal'] as $cond_fiscal);
+            $razon_social = $request['razon_social'];
+            $cuit = $request['cuit'];
+    
+            $facturacion = new Facturacion();
+            $facturacion->titulo = $razon_social;
+            $facturacion->razon_social = $razon_social;
+            $facturacion->cuit = $cuit;
+            $facturacion->condicion_fiscal = $cond_fiscal;
+            $facturacion->user = 'unica';
+            $facturacion->save();
+            
+            $qf = facturacion::latest('id')->first(); 
+            $facturacion = $qf->id;
+
+            $localidad = $request['localidad'];
+            $codigoPostal = $request['codigoPostal'];
+            $telContacto = $request['telContacto'];
+            $provincia = $request['provincia'];
+    
+            $calle = $request['calle'];
+            $numero = $request['numero'];
+            $piso = $request['piso'];
+            $dpto = $request['dpto'];
+            $referencia = $request['referencia'];
+    
+            $direccion = new Direccion();
+            $direccion->titulo = $calle;
+            $direccion->calle = $calle;
+            $direccion->numero = $numero;
+            $direccion->piso = $piso;
+            $direccion->dpto = $dpto;
+            $direccion->localidad = $localidad;
+            $direccion->provincia = $provincia;
+            $direccion->codigoPostal = $codigoPostal;
+            $direccion->telContacto = $telContacto;
+            $direccion->referencia = $referencia;
+            $direccion->user = 'unica';
+            $direccion->save();
+
+            $qf = Direccion::latest('id')->first(); 
+            $direccion = $qf->id;
+
+            $pedido = pedido::find($id);
+            $pedido->id_dir = $direccion;
+            $pedido->id_fact = $facturacion;
+            $pedido->modo_pago = $pago;
+            $pedido->estado_pago = 'por cobrar';
+            $pedido->estado = 'comprado';
+            $pedido->save();
+
+            if($pago == 'transferencia' ) {
+
+                $pedido = 'Pedido Cinco Sentidos #000'.$id;
+                $total = $request->get('total');
+                /* return view('transferencia'); */
+                return view('transferencia')->with('detalle',$pedido)->with('total',$total)->with('id',$id);
+    
+            }elseif($pago == 'mercadoPago'){
+                $pedido = 'Pedido Cinco Sentidos #000'.$id;
+                $total = $request->get('total');
+    
+                return view('mercadoPago')->with('detalle',$pedido)->with('total',$total)->with('id',$id);
+                
+    
+            }else{
+    
+                /* return view('efectivo'); */
+                echo 'Imagen de Pago en efectivo';
+    
+            }
+
+            
+        };
 
         foreach($request->get('facturacion') as $facturacion);
         foreach($request->get('direccion') as $direccion);

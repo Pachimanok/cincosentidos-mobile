@@ -155,10 +155,10 @@
                             color: white;">
                                 Registrarme
                             </a>
-                           {{--  <a type="submit" class="btn btn-outline-secondary mt-3"
+                           <a href="/catalogo" class="btn btn-outline-secondary mt-3"
                                 style="border-radius:50px;width: 100%;">
-                                compra unica
-                            </a> --}}
+                                compra única
+                            </a>
                         </div>
                     </div>
                     </form>

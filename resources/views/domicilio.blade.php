@@ -111,7 +111,7 @@
         </div>
         <div class="row mt-3 text-center">
             <div class="col-md-8 mx-auto">
-                <button type="submit" class="btn btn-primary btn-login" style="border-radius:50px;width: 75%; background: #af3636;
+                <button type="submit" name="unica" class="btn btn-primary btn-login" style="border-radius:50px;width: 75%; background: #af3636;
                     color: white;">
                     Continuar
                 </button>

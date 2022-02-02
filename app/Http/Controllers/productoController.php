@@ -21,25 +21,34 @@ class productoController extends Controller
      */
     public function index()
     {
+        
         $user = Auth::user();
-        $u = $user->name;
-        $r = $user->role;
-        $message = session('message');
 
+        if($user != null){
+            $u = $user->name;
+            $r = $user->role;
+            $message = session('message');
 
-        if ( $r == 'user'){
-            $d = 1 - $user->descuento;
-            $dto = $user->descuento * 100;
+            if ( $r == 'user'){
+                $d = 1 - $user->descuento;
+                $dto = $user->descuento * 100;
+                $productos = db::table('products')->where('estado','=','activo')->orderBy('orden', 'asc')->get();
+                
+                return view('catalogo2')->with('productos', $productos)->with('d', $d)->with('dto', $dto);
+
+            } else {
+
+                $productos = db::table('products')->orderBy('orden', 'asc')->get();
+                return view('admin.catalogo')->with('productos', $productos)->with('message',$message);
+
+            }
+        }else{
             $productos = db::table('products')->where('estado','=','activo')->orderBy('orden', 'asc')->get();
-            
-            return view('catalogo2')->with('productos', $productos)->with('d', $d)->with('dto', $dto);
-
-        } else {
-
-            $productos = db::table('products')->orderBy('orden', 'asc')->get();
-            return view('admin.catalogo')->with('productos', $productos)->with('message',$message);
-
+            $d = 1 - 0.2;
+            $dto = 0.2 * 100;    
+            return view('catalogoUnica')->with('productos', $productos)->with('d', $d)->with('dto', $dto);
         }
+        
 
     }
 
