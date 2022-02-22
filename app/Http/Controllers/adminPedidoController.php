@@ -144,7 +144,7 @@ class adminPedidoController extends Controller
             $datos = $qd[0];
             $qp = db::table('detallepedidos')->where('id_pedido','=',$id)->get();
             $qcantidad = db::table('detallepedidos')->where('id_pedido','=',$id)->sum('cantidad');
-
+            return $datos;
             $pdf = PDF::loadView('pdf.remito',array('datos' => $datos,'pedidos' => $qp,'cantidad' => $qcantidad));
             $output = $pdf->output();
             file_put_contents('despachos/Despacho'.$id.'.pdf', $output);

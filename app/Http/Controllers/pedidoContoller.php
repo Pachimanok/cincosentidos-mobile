@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\pedidoNuevo;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
@@ -10,9 +11,7 @@ use App\Models\pedido;
 use App\Models\detallepedido;
 use App\Models\Facturacion;
 use App\Models\Direccion;
-
-
-
+use Illuminate\Support\Facades\Mail;
 
 class pedidoContoller extends Controller
 {
@@ -23,7 +22,6 @@ class pedidoContoller extends Controller
      */
     public function index()
     {
-        
     }
 
     /**
@@ -45,8 +43,7 @@ class pedidoContoller extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        
-        if($user != null){
+        if ($user != null) {
 
             $u = $user->name;
             $d = $user->descuento;
@@ -56,20 +53,20 @@ class pedidoContoller extends Controller
             $pedido->user = $u;
             $pedido->save();
 
-            $id_pedido = pedido::latest('id')->first(); 
+            $id_pedido = pedido::latest('id')->first();
             $id_p = $id_pedido->id;
 
-            foreach($request->get('cantidad') as $idart=>$cantidad){
+            foreach ($request->get('cantidad') as $idart => $cantidad) {
 
-                $catalogo = db::table('products')->where('id','=',$idart)->get();
+                $catalogo = db::table('products')->where('id', '=', $idart)->get();
                 $cat = $catalogo[0];
                 $prod = $cat->titulo;
                 $id_producto = $cat->id;
-                $px= $cat->precio;
+                $px = $cat->precio;
                 $pf = $px * $dto * $cantidad;
 
-                if( $cantidad >=1){
-                    if( $cantidad >=1){
+                if ($cantidad >= 1) {
+                    if ($cantidad >= 1) {
                         $detpedido = new detallepedido();
                         $detpedido->id_pedido = $id_p;
                         $detpedido->cantidad = $cantidad;
@@ -81,13 +78,13 @@ class pedidoContoller extends Controller
                     }
                 }
             }
-            
+
             /* detalle pedido */
-            $detalle = db::table('detallepedidos')->where('id_pedido','=',$id_p)->get();
+            $detalle = db::table('detallepedidos')->where('id_pedido', '=', $id_p)->get();
             $total = $detalle->sum('precio');
 
             /* total a pagar */
-            $qpx = db::table('pedidos')->where('id','=',$id_p)->get();
+            $qpx = db::table('pedidos')->where('id', '=', $id_p)->get();
             $precio = $qpx[0];
             $px = $precio->total;
             $id = $precio->id;
@@ -97,13 +94,14 @@ class pedidoContoller extends Controller
             $pedido->estado = 'comprando';
             $pedido->save();
 
+            $facturacion = db::table('facturacions')->where('user', '=', $u)->get();
+            $direccion = db::table('direccions')->where('user', '=', $u)->get();
+            $mail = Mail::to('manuval@finca-algarve.com.ar')->send(new pedidoNuevo($pedido)); 
 
-            $facturacion = db::table('facturacions')->where('user','=',$u)->get();
-            $direccion = db::table('direccions')->where('user','=',$u)->get();
 
+            return view('resumen')->with('detalle', $detalle)->with('precio', $total)->with('id', $id)->with('facturacion', $facturacion)->with('direccion', $direccion);
 
-            return view('resumen')->with('detalle',$detalle)->with('precio',$total)->with('id',$id)->with('facturacion',$facturacion)->with('direccion',$direccion);
-        }else{
+        } else {
             $u = $request->user;
             $dto = $request->dto;
 
@@ -112,20 +110,20 @@ class pedidoContoller extends Controller
             $pedido->user = $u;
             $pedido->save();
 
-            $id_pedido = pedido::latest('id')->first(); 
+            $id_pedido = pedido::latest('id')->first();
             $id_p = $id_pedido->id;
 
-            foreach($request->get('cantidad') as $idart=>$cantidad){
+            foreach ($request->get('cantidad') as $idart => $cantidad) {
 
-                $catalogo = db::table('products')->where('id','=',$idart)->get();
+                $catalogo = db::table('products')->where('id', '=', $idart)->get();
                 $cat = $catalogo[0];
                 $prod = $cat->titulo;
                 $id_producto = $cat->id;
                 $px = $cat->precio;
                 $pf = $px * $dto * $cantidad;
 
-                if( $cantidad >=1){
-                    if( $cantidad >=1){
+                if ($cantidad >= 1) {
+                    if ($cantidad >= 1) {
                         $detpedido = new detallepedido();
                         $detpedido->id_pedido = $id_p;
                         $detpedido->cantidad = $cantidad;
@@ -138,11 +136,11 @@ class pedidoContoller extends Controller
                 }
             }
             /* detalle pedido */
-            $detalle = db::table('detallepedidos')->where('id_pedido','=',$id_p)->get();
+            $detalle = db::table('detallepedidos')->where('id_pedido', '=', $id_p)->get();
             $total = $detalle->sum('precio');
 
             /* total a pagar */
-            $qpx = db::table('pedidos')->where('id','=',$id_p)->get();
+            $qpx = db::table('pedidos')->where('id', '=', $id_p)->get();
             $precio = $qpx[0];
             $px = $precio->total;
             $id = $precio->id;
@@ -152,8 +150,9 @@ class pedidoContoller extends Controller
             $pedido->estado = 'comprando';
             $pedido->save();
 
-            return view('resumenCompraUnica')->with('detalle',$detalle)->with('precio',$total)->with('id',$id);
+            $mail = Mail::to('manuval@finca-algarve.com.ar')->send(new pedidoNuevo($pedido)); 
 
+            return view('resumenCompraUnica')->with('detalle', $detalle)->with('precio', $total)->with('id', $id);
         }
     }
 
@@ -171,16 +170,19 @@ class pedidoContoller extends Controller
         /* 1.c compromamos le precio actual  */
 
 
-        $qpedido = db::table('detallepedidos')->join('products','detallepedidos.id_producto','=','products.id')->select('detallepedidos.cantidad','detallepedidos.id_producto','products.sub_titulo','products.titulo','products.precio','products.imagen')->where('detallepedidos.id_pedido','=',$id)->where('products.stock','=','si')->get();
-        $qpedidoNo = db::table('detallepedidos')->join('products','detallepedidos.id_producto','=','products.id')->select('detallepedidos.cantidad','detallepedidos.id_producto','products.sub_titulo','products.titulo','products.precio','products.imagen')->where('detallepedidos.id_pedido','=',$id)->where('products.stock','=','no')->get();
-        $suma = db::table('detallepedidos')->join('products','detallepedidos.id_producto','=','products.id')->select(db::raw('sum(products.precio * detallepedidos.cantidad) as sumado'))->where('detallepedidos.id_pedido','=',$id)->where('products.stock','=','si')->get();
+        $qpedido = db::table('detallepedidos')->join('products', 'detallepedidos.id_producto', '=', 'products.id')->select('detallepedidos.cantidad', 'detallepedidos.id_producto', 'products.sub_titulo', 'products.titulo', 'products.precio', 'products.imagen')->where('detallepedidos.id_pedido', '=', $id)->where('products.stock', '=', 'si')->get();
+        $qpedidoNo = db::table('detallepedidos')->join('products', 'detallepedidos.id_producto', '=', 'products.id')->select('detallepedidos.cantidad', 'detallepedidos.id_producto', 'products.sub_titulo', 'products.titulo', 'products.precio', 'products.imagen')->where('detallepedidos.id_pedido', '=', $id)->where('products.stock', '=', 'no')->get();
+        $suma = db::table('detallepedidos')->join('products', 'detallepedidos.id_producto', '=', 'products.id')->select(db::raw('sum(products.precio * detallepedidos.cantidad) as sumado'))->where('detallepedidos.id_pedido', '=', $id)->where('products.stock', '=', 'si')->get();
         $qtotal = $suma[0]->sumado;
-        /* 2. Armamos el mensaje para la vista */
         
+        /* 2. Armamos el mensaje para la vista */
+
         $faltantes = array();
-            foreach($qpedidoNo as $faltante) {
-                $faltantes[] = $faltante->titulo . ' ' . $faltante->sub_titulo;
-            }
+        
+        foreach ($qpedidoNo as $faltante) {
+            $faltantes[] = $faltante->titulo . ' ' . $faltante->sub_titulo;
+        }
+        
         /* 3. Armamos el nuevo pedido */
         /* 3.a Datos del Usuario */
         /* 3.b calulamos el descuento y se lo aplicamos al precio final */
@@ -191,51 +193,53 @@ class pedidoContoller extends Controller
         /* 3.g Buscamos los datos de facturacion y direccion */
         /* 3.h enviamos a la vista las variables */
 
-            $user = Auth::user();
-            $d = $user->descuento;
-            $u = $user->name;
-        
-            $dto = 1 - $d;
-            $total = $qtotal * $dto;
-           
-            
-            if($qpedido->isEmpty()){
-              
-                    return view('noHayStock');
-                
-            }else{  
-                
-                foreach($qpedido as $pedido){ 
-                
-                    $cantidad = $pedido->cantidad;
-                }
-                $pedidoas = new pedido();
-                $pedidoas->user = $u;
-                $pedidoas->save();
+        $user = Auth::user();
+        $d = $user->descuento;
+        $u = $user->name;
 
-                $id_pedido = pedido::latest('id')->first(); 
-                $id_p = $id_pedido->id;
-            
+        $id_pedido = pedido::latest('id')->first();
+        $id_p = $id_pedido->id;
 
-                $precio = $pedido->precio * $dto * $cantidad;
-              
-                    
+        $dto = 1 - $d;
+        $total = $qtotal * $dto;
+
+        if ($qpedido->isEmpty()) {
+
+            return view('noHayStock');
+
+        } else {
+            
+            $pedidoas = new pedido();
+            $pedidoas->user = $u;
+            $pedidoas->save();
+
+            $newPedido = new detallepedido();
+            $newPedido->id_pedido = $id_p;
+
+            foreach ($qpedido as $pedido) {
+
                 $newPedido = new detallepedido();
                 $newPedido->id_pedido = $id_p;
+                $cantidad = $pedido->cantidad;
                 $newPedido->cantidad = $cantidad;
                 $newPedido->producto = $pedido->titulo;
                 $newPedido->id_producto = $pedido->id_producto;
+                $precio = $pedido->precio * $dto * $cantidad;
                 $newPedido->precio = $precio;
                 $newPedido->user = $u;
-                $newPedido->save();     
-            }
-   
-        $facturacion = db::table('facturacions')->where('user','=',$u)->get();
-        $direccion = db::table('direccions')->where('user','=',$u)->get();
-        
-        return view ('repetirPedido')->with('pedidos', $qpedido)->with('pedidosNo', $faltantes)->with('dto', $dto)->with('total',$total)->with('id',$id_p)->with('facturacion',$facturacion)->with('direccion',$direccion); 
-        
-    }     
+                $newPedido->save();
+
+            }        
+     
+        }
+
+        $facturacion = db::table('facturacions')->where('user', '=', $u)->get();
+        $direccion = db::table('direccions')->where('user', '=', $u)->get();
+
+        $mail = Mail::to('manuval@finca-algarve.com.ar')->send(new pedidoNuevo($newPedido)); 
+
+        return view('repetirPedido')->with('pedidos', $qpedido)->with('pedidosNo', $faltantes)->with('dto', $dto)->with('total', $total)->with('id', $id_p)->with('facturacion', $facturacion)->with('direccion', $direccion);
+     }
 
 
     /**
@@ -259,14 +263,14 @@ class pedidoContoller extends Controller
     public function update(Request $request, $id)
     {
 
-        if($request->unica == 'unica'){
-            
-            foreach($request->get('pago') as $pago);
-            
-            foreach($request['cond_fiscal'] as $cond_fiscal);
+        if ($request->unica == 'unica') {
+
+            foreach ($request->get('pago') as $pago);
+
+            foreach ($request['cond_fiscal'] as $cond_fiscal);
             $razon_social = $request['razon_social'];
             $cuit = $request['cuit'];
-    
+
             $facturacion = new Facturacion();
             $facturacion->titulo = $razon_social;
             $facturacion->razon_social = $razon_social;
@@ -274,21 +278,21 @@ class pedidoContoller extends Controller
             $facturacion->condicion_fiscal = $cond_fiscal;
             $facturacion->user = 'unica';
             $facturacion->save();
-            
-            $qf = facturacion::latest('id')->first(); 
+
+            $qf = facturacion::latest('id')->first();
             $facturacion = $qf->id;
 
             $localidad = $request['localidad'];
             $codigoPostal = $request['codigoPostal'];
             $telContacto = $request['telContacto'];
             $provincia = $request['provincia'];
-    
+
             $calle = $request['calle'];
             $numero = $request['numero'];
             $piso = $request['piso'];
             $dpto = $request['dpto'];
             $referencia = $request['referencia'];
-    
+
             $direccion = new Direccion();
             $direccion->titulo = $calle;
             $direccion->calle = $calle;
@@ -303,7 +307,7 @@ class pedidoContoller extends Controller
             $direccion->user = 'unica';
             $direccion->save();
 
-            $qf = Direccion::latest('id')->first(); 
+            $qf = Direccion::latest('id')->first();
             $direccion = $qf->id;
 
             $pedido = pedido::find($id);
@@ -314,33 +318,27 @@ class pedidoContoller extends Controller
             $pedido->estado = 'comprado';
             $pedido->save();
 
-            if($pago == 'transferencia' ) {
+            if ($pago == 'transferencia') {
 
-                $pedido = 'Pedido Cinco Sentidos #000'.$id;
+                $pedido = 'Pedido Cinco Sentidos #000' . $id;
                 $total = $request->get('total');
                 /* return view('transferencia'); */
-                return view('transferencia')->with('detalle',$pedido)->with('total',$total)->with('id',$id);
-    
-            }elseif($pago == 'mercadoPago'){
-                $pedido = 'Pedido Cinco Sentidos #000'.$id;
+                return view('transferencia')->with('detalle', $pedido)->with('total', $total)->with('id', $id);
+            } elseif ($pago == 'mercadoPago') {
+                $pedido = 'Pedido Cinco Sentidos #000' . $id;
                 $total = $request->get('total');
-    
-                return view('mercadoPago')->with('detalle',$pedido)->with('total',$total)->with('id',$id);
-                
-    
-            }else{
-    
+
+                return view('mercadoPago')->with('detalle', $pedido)->with('total', $total)->with('id', $id);
+            } else {
+
                 /* return view('efectivo'); */
                 echo 'Imagen de Pago en efectivo';
-    
             }
-
-            
         };
 
-        foreach($request->get('facturacion') as $facturacion);
-        foreach($request->get('direccion') as $direccion);
-        foreach($request->get('pago') as $pago);
+        foreach ($request->get('facturacion') as $facturacion);
+        foreach ($request->get('direccion') as $direccion);
+        foreach ($request->get('pago') as $pago);
 
         $pedido = pedido::find($id);
         $pedido->id_dir = $direccion;
@@ -350,27 +348,22 @@ class pedidoContoller extends Controller
         $pedido->estado = 'comprado';
         $pedido->save();
 
-        if($pago == 'transferencia' ) {
+        if ($pago == 'transferencia') {
 
-            $pedido = 'Pedido Cinco Sentidos #000'.$id;
+            $pedido = 'Pedido Cinco Sentidos #000' . $id;
             $total = $request->get('total');
             /* return view('transferencia'); */
-            return view('transferencia')->with('detalle',$pedido)->with('total',$total)->with('id',$id);
-
-        }elseif($pago == 'mercadoPago'){
-            $pedido = 'Pedido Cinco Sentidos #000'.$id;
+            return view('transferencia')->with('detalle', $pedido)->with('total', $total)->with('id', $id);
+        } elseif ($pago == 'mercadoPago') {
+            $pedido = 'Pedido Cinco Sentidos #000' . $id;
             $total = $request->get('total');
 
-            return view('mercadoPago')->with('detalle',$pedido)->with('total',$total)->with('id',$id);
-            
-
-        }else{
+            return view('mercadoPago')->with('detalle', $pedido)->with('total', $total)->with('id', $id);
+        } else {
 
             /* return view('efectivo'); */
             echo 'Imagen de Pago en efectivo';
-
         }
-
     }
 
     /**

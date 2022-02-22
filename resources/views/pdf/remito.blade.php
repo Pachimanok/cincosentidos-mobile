@@ -72,16 +72,13 @@
     }
 
 </style>
-
 <body>
     <div class="container">
-
         <div class="col">
             <img src="https://cincosentidos.ar/public/assets/img/5s.png" style="width: 10rem;" alt="">
             <h1>REMITO</h1>
             <h6>DESTINATARIO FINAL</h6>
         </div>
-            
         <table style="width: -webkit-fill-available; border-spacing: 0px;">
             <tr>
                 <td style="border-right: none;">
@@ -110,13 +107,13 @@
                     <h4>Fec. Despacho</h4>
                 </td>
                 <td class="text-gray" style="border-right: none;">
-                    <h4>09/09/2021</h4>
+                    <h4>{{Carbon::now()}}</h4>
                 </td>
                 <td style="border-right: none;">
                     <h4>Guia N°</h4>
                 </td>
                 <td class="text-gray" style="border-right: none;">
-                    <h4>56786</h4>
+                    <h4></h4>
                 </td>
                 <td style="border-right: none;">
                     <h4>Facrtura</h4>

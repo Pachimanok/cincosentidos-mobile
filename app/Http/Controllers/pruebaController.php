@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Barryvdh\DomPDF\PDF as DomPDFPDF;
-use Dompdf\Adapter\PDFLib;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
 use PDF;
 
-class imprimirController extends Controller
+class pruebaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,18 +16,7 @@ class imprimirController extends Controller
      */
     public function index()
     {
-        $qd = db::table('pedidos')->join('direccions','pedidos.id_dir','=','direccions.id')->where('pedidos.id','=','11')->get();
-        $datos = $qd[0];
-        $qp = db::table('detallepedidos')->where('id_pedido','=','11')->get();
-        $qcantidad = db::table('detallepedidos')->where('id_pedido','=','11')->sum('cantidad');
-
-        
-      
-        /* return view('pdf.remito');   */
-            $pdf = PDF::loadView('pdf.remito',array('datos' => $datos,'pedidos' => $qp,'cantidad' => $qcantidad));
-            $output = $pdf->output();
-            file_put_contents('despachos/Despacho '.'11'.'.pdf', $output);
-           /*  return $pdf->download('nombre.pdf');  */
+        //
     }
 
     /**
@@ -61,8 +48,18 @@ class imprimirController extends Controller
      */
     public function show($id)
     {
-        //
-            
+        
+        $qd = DB::table('pedidos')->select('pedidos.id','pedidos.user','pedidos.total','pedidos.observaciones','pedidos.seguimiento','pedidos.transporte','pedidos.factura','pedidos.remito','direccions.calle','direccions.numero','direccions.piso','direccions.dpto','direccions.referencia','direccions.provincia','direccions.localidad','direccions.codigoPostal','direccions.telContacto')->join('direccions','pedidos.id_dir','=','direccions.id')->join('products','pedidos.id_dir','=','direccions.id')->where('pedidos.id','=',$id)->get();
+        $datos = $qd[0];
+        $qp = db::table('detallepedidos')->where('id_pedido','=',$id)->join('products','detallepedidos.id_producto',"=",'products.id')->get();
+        $qcantidad = db::table('detallepedidos')->where('id_pedido','=',$id)->sum('cantidad');
+        
+        
+        $fecha = Carbon::now()->format('d-m-Y');
+        /* return view('pdf.remito2',array('datos' => $datos,'pedidos' => $qp,'cantidad' => $qcantidad,'fecha' => $fecha)); */
+        $pdf = PDF::loadView('pdf.remito2',array('datos' => $datos,'pedidos' => $qp,'cantidad' => $qcantidad,'fecha' => $fecha));
+        $output = $pdf->output();
+        file_put_contents('despachos/Despacho'.$id.'.pdf', $output);
     }
 
     /**
@@ -85,7 +82,7 @@ class imprimirController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+        //
     }
 
     /**

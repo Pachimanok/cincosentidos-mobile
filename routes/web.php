@@ -173,6 +173,8 @@ Route::resource('usuarios', 'App\Http\Controllers\usuariosController');
 Route::resource('imprimir', 'App\Http\Controllers\imprimirController');
 Route::resource('transporte', 'App\Http\Controllers\transportController');
 Route::resource('parametro', 'App\Http\Controllers\parametroController');
+Route::resource('prueba', 'App\Http\Controllers\pruebaController');
+
 
 
 
