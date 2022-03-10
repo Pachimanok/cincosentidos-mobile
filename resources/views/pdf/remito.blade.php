@@ -107,7 +107,7 @@
                     <h4>Fec. Despacho</h4>
                 </td>
                 <td class="text-gray" style="border-right: none;">
-                    <h4>{{Carbon::now()}}</h4>
+                    <h4>{{ $hoy }}</h4>
                 </td>
                 <td style="border-right: none;">
                     <h4>Guia N°</h4>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\nuevoDespacho;
 use App\Models\pedido;
 use App\Models\transport;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -23,6 +24,7 @@ class adminPedidoController extends Controller
      */
     public function index()
     {
+        
         $user = Auth::user();
         $name = $user->name;
         $email = $user->email;
@@ -139,13 +141,12 @@ class adminPedidoController extends Controller
             $pedido->link_seguimiento = $link;
             $pedido->remito = $request['remito'];
             $pedido->save(); 
-
+            $date = Carbon::now();
             $qd = db::table('pedidos')->select('pedidos.id','pedidos.user','pedidos.total','pedidos.observaciones','pedidos.seguimiento','pedidos.transporte','pedidos.factura','pedidos.remito','direccions.calle','direccions.numero','direccions.piso','direccions.dpto','direccions.referencia','direccions.provincia','direccions.localidad','direccions.codigoPostal','direccions.telContacto')->join('direccions','pedidos.id_dir','=','direccions.id')->where('pedidos.id','=',$id)->get();
             $datos = $qd[0];
             $qp = db::table('detallepedidos')->where('id_pedido','=',$id)->get();
             $qcantidad = db::table('detallepedidos')->where('id_pedido','=',$id)->sum('cantidad');
-            return $datos;
-            $pdf = PDF::loadView('pdf.remito',array('datos' => $datos,'pedidos' => $qp,'cantidad' => $qcantidad));
+            $pdf = PDF::loadView('pdf.remito',array('datos' => $datos,'pedidos' => $qp,'hoy' => $date,'cantidad' => $qcantidad));
             $output = $pdf->output();
             file_put_contents('despachos/Despacho'.$id.'.pdf', $output);
             
@@ -158,7 +159,6 @@ class adminPedidoController extends Controller
             if( strpos($destinatario, ',') !== false || strpos($destinatario, ', ') !== false) {
                 /* tiene mas de un destinatario */
                 $destinatario = explode(', ',$destinatario); 
-               
 
            }
            if( strpos($copia, ',') !== false || strpos($copia, ', ') !== false ) {
