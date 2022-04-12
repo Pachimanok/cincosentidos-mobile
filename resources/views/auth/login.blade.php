@@ -57,11 +57,9 @@
                             color: white;">
                                 {{ __('ingresar') }}
                             </button>
-                          {{--   @if (Route::has('password.request'))
                                 <a class="btn btn-link btn-forgot-password" href="{{ route('password.request') }}">
-                                    {{ __('Forgot Your Password?') }}
+                                    {{ __('Olvidaste la contraseña?') }}
                                 </a>
-                            @endif --}}
                         </div>
                     </div>
                 </form>

@@ -240,6 +240,9 @@
                 <td class="text-gray newtd2">
                     <h4 class="h4dato">Cantidad: {{ $pedido->cantidad}}</h4>
                 </td>
+                <td class="text-gray newtd2">
+                    <h4 class="h4dato">Cantidad: {{ $pedido->cantidad}}</h4>
+                </td>
                 <td style="border: none;"></td>
                 <td class="text-gray" style="border: none;"></td>
             </tr>

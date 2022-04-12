@@ -142,11 +142,14 @@ class adminPedidoController extends Controller
             $pedido->remito = $request['remito'];
             $pedido->save(); 
             $date = Carbon::now();
-            $qd = db::table('pedidos')->select('pedidos.id','pedidos.user','pedidos.total','pedidos.observaciones','pedidos.seguimiento','pedidos.transporte','pedidos.factura','pedidos.remito','direccions.calle','direccions.numero','direccions.piso','direccions.dpto','direccions.referencia','direccions.provincia','direccions.localidad','direccions.codigoPostal','direccions.telContacto')->join('direccions','pedidos.id_dir','=','direccions.id')->where('pedidos.id','=',$id)->get();
+
+            $qd = DB::table('pedidos')->select('pedidos.id','pedidos.user','pedidos.total','pedidos.observaciones','pedidos.seguimiento','pedidos.transporte','pedidos.factura','pedidos.remito','direccions.calle','direccions.numero','direccions.piso','direccions.dpto','direccions.referencia','direccions.provincia','direccions.localidad','direccions.codigoPostal','direccions.telContacto')->join('direccions','pedidos.id_dir','=','direccions.id')->join('products','pedidos.id_dir','=','direccions.id')->where('pedidos.id','=',$id)->get();
             $datos = $qd[0];
-            $qp = db::table('detallepedidos')->where('id_pedido','=',$id)->get();
+            $qp = db::table('detallepedidos')->where('id_pedido','=',$id)->join('products','detallepedidos.id_producto',"=",'products.id')->get();
             $qcantidad = db::table('detallepedidos')->where('id_pedido','=',$id)->sum('cantidad');
-            $pdf = PDF::loadView('pdf.remito',array('datos' => $datos,'pedidos' => $qp,'hoy' => $date,'cantidad' => $qcantidad));
+            $fecha = Carbon::now()->format('d-m-Y');
+            $pdf = PDF::loadView('pdf.remito2',array('datos' => $datos,'pedidos' => $qp,'cantidad' => $qcantidad,'fecha' => $fecha));
+            /* $pdf = PDF::loadView('pdf.remito',array('datos' => $datos,'pedidos' => $qp,'hoy' => $date,'cantidad' => $qcantidad)); */
             $output = $pdf->output();
             file_put_contents('despachos/Despacho'.$id.'.pdf', $output);
             
