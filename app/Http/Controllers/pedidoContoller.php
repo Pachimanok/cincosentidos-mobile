@@ -43,6 +43,7 @@ class pedidoContoller extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
+
         if ($user != null) {
 
             $u = $user->name;
@@ -78,6 +79,8 @@ class pedidoContoller extends Controller
                     }
                 }
             }
+           
+
 
             /* detalle pedido */
             $detalle = db::table('detallepedidos')->where('id_pedido', '=', $id_p)->get();
@@ -102,9 +105,9 @@ class pedidoContoller extends Controller
             return view('resumen')->with('detalle', $detalle)->with('precio', $total)->with('id', $id)->with('facturacion', $facturacion)->with('direccion', $direccion);
 
         } else {
+
             $u = $request->user;
             $dto = $request->dto;
-
 
             $pedido = new pedido();
             $pedido->user = $u;
@@ -112,6 +115,7 @@ class pedidoContoller extends Controller
 
             $id_pedido = pedido::latest('id')->first();
             $id_p = $id_pedido->id;
+            return $id_p;
 
             foreach ($request->get('cantidad') as $idart => $cantidad) {
 
@@ -150,7 +154,7 @@ class pedidoContoller extends Controller
             $pedido->estado = 'comprando';
             $pedido->save();
 
-            $mail = Mail::to('manuval@finca-algarve.com.ar')->send(new pedidoNuevo($pedido)); 
+            $mail = Mail::to('manuval@finca-algarve.com.ar')->send(new pedidoNuevo($pedido));
 
             return view('resumenCompraUnica')->with('detalle', $detalle)->with('precio', $total)->with('id', $id);
         }
@@ -168,7 +172,6 @@ class pedidoContoller extends Controller
         /* 1.a revisamos que esté en stock  */
         /* 1.b Revisamos si hay faltantes para comunicar  */
         /* 1.c compromamos le precio actual  */
-
 
         $qpedido = db::table('detallepedidos')->join('products', 'detallepedidos.id_producto', '=', 'products.id')->select('detallepedidos.cantidad', 'detallepedidos.id_producto', 'products.sub_titulo', 'products.titulo', 'products.precio', 'products.imagen')->where('detallepedidos.id_pedido', '=', $id)->where('products.stock', '=', 'si')->get();
         $qpedidoNo = db::table('detallepedidos')->join('products', 'detallepedidos.id_producto', '=', 'products.id')->select('detallepedidos.cantidad', 'detallepedidos.id_producto', 'products.sub_titulo', 'products.titulo', 'products.precio', 'products.imagen')->where('detallepedidos.id_pedido', '=', $id)->where('products.stock', '=', 'no')->get();
@@ -197,8 +200,15 @@ class pedidoContoller extends Controller
         $d = $user->descuento;
         $u = $user->name;
 
-        $id_pedido = pedido::latest('id')->first();
-        $id_p = $id_pedido->id;
+       /*  $id_pedido = pedido::latest('id')->first();
+        $id_p = $id_pedido->id + 1;
+    
+        $existePedido = pedido::find($id_p);
+        
+        if($existePedido['id'] != $id_p){
+            $id_pedido = pedido::latest('id')->first();
+            $id_p = $id_pedido->id; 
+        }else { */
 
         $dto = 1 - $d;
         $total = $qtotal * $dto;
@@ -213,6 +223,9 @@ class pedidoContoller extends Controller
             $pedidoas->user = $u;
             $pedidoas->save();
 
+            $id_pedido = pedido::latest('id')->first();
+            $id_p = $id_pedido->id; 
+            
             $newPedido = new detallepedido();
             $newPedido->id_pedido = $id_p;
 
@@ -228,9 +241,7 @@ class pedidoContoller extends Controller
                 $newPedido->precio = $precio;
                 $newPedido->user = $u;
                 $newPedido->save();
-
             }        
-     
         }
 
         $facturacion = db::table('facturacions')->where('user', '=', $u)->get();
@@ -239,7 +250,8 @@ class pedidoContoller extends Controller
         $mail = Mail::to('manuval@finca-algarve.com.ar')->send(new pedidoNuevo($newPedido)); 
 
         return view('repetirPedido')->with('pedidos', $qpedido)->with('pedidosNo', $faltantes)->with('dto', $dto)->with('total', $total)->with('id', $id_p)->with('facturacion', $facturacion)->with('direccion', $direccion);
-     }
+     /* }; */
+    }
 
 
     /**
